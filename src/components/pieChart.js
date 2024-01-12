@@ -1,44 +1,23 @@
-// PieChart.js
+import React from 'react';
+import { Doughnut } from 'react-chartjs-2';
 
-import React, { useEffect, useRef } from 'react';
-import Chart from 'chart.js/auto';
-
-const PieChart = ({ data }) => {
-  const chartRef = useRef(null);
-
-  useEffect(() => {
-    // Önce mevcut grafiği yok et
-    if (chartRef.current) {
-      const chartInstance = new Chart(chartRef.current, {
-        type: 'pie',
-        data: {
-          labels: data.labels,
-          datasets: [{
-            data: data.values,
-            backgroundColor: data.colors,
-          }],
-        },
-      });
-
-      // Eski grafiği yok et
-      chartInstance.destroy();
-    }
-
-    // Ardından yeni grafiği oluştur
-    const ctx = chartRef.current.getContext('2d');
-    new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: data.labels,
-        datasets: [{
-          data: data.values,
-          backgroundColor: data.colors,
-        }],
+const PieChart = () => {
+  const data = {
+    labels: ['Kategori 1', 'Kategori 2', 'Kategori 3'],
+    datasets: [
+      {
+        data: [30, 40, 30],
+        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
       },
-    });
-  }, [data]);
+    ],
+  };
 
-  return <canvas ref={chartRef} width="400" height="400" />;
+  return (
+    <div className="w-64 h-64">
+      <Doughnut data={data} />
+    </div>
+  );
 };
 
 export default PieChart;
