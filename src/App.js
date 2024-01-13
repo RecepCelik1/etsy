@@ -3,6 +3,8 @@ import { useDispatch , useSelector } from "react-redux";
 import { priceFunc , costFunc , shippingChargeFunc , shippingFunc } from "./redux/priceSlice";
 import Options from "./components/options";
 import Consequences from "./components/consequences";
+import { useEffect } from "react";
+import { getCurrency } from "./redux/currencyApiSlice";
 //import PieChart from "./components/pieChart";
 
 function App() {
@@ -13,6 +15,14 @@ function App() {
   const shippingCharge = useSelector(state => state.price.shippingCharge)
   const shippingCost = useSelector(state => state.price.shipping)  */ 
   
+
+
+  useEffect(()=> {
+    dispatch(getCurrency())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+
+
   const selectedCountry = useSelector(state => state.country.country)
   console.log("selectedCountry : " , selectedCountry)
   const handleInputChange = (event, field) => {

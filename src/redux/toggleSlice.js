@@ -99,13 +99,25 @@ export const toggleSlice = createSlice({
       }      
     },
     UkVatRateFunc : (state , action) => {
-      state.UkVatRate = action.payload
+      if(isNaN(action.payload)){
+        state.UkVatRate = 0
+      }else {
+        state.UkVatRate = action.payload
+      }
     },
     FeeVatRateFunc : (state , action) => {
-      state.vatFeeRate = action.payload
+      if(isNaN(action.payload)){
+        state.vatFeeRate = 0
+      }else {
+        state.vatFeeRate = action.payload
+      }  
     },
     ukCostsFunc : (state , action) => {
-      state.ukCosts = action.payload
+      if(isNaN(action.payload)){
+        state.ukCosts = 0
+      }else {
+        state.ukCosts = action.payload
+      }
     }
   },
 })

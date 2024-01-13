@@ -33,8 +33,8 @@ const Options = () => {
 
 
     const countries = [
-        { value: 'US', label: 'US dollar', flag: '🇺🇸' },
-        { value: 'UK', label: 'GBP', flag: 'UK' },
+        { value: 'US', label: 'United States', flag: '🇺🇸' },
+        { value: 'UK', label: 'United Kingdom', flag: 'UK' },
       ];
 
       const customStyles = {
@@ -83,7 +83,7 @@ const Options = () => {
             dispatch(boolToggleFunc(field))
       };
 
-       const UsdAdds = useSelector(state => state.toggle.underOrOver10kUsd)
+       //const UsdAdds = useSelector(state => state.toggle.underOrOver10kUsd)
        const TaxRate = useSelector(state => state.toggle.salesTax)
        const CostValue = useSelector(state => state.toggle.otherCost)
       
