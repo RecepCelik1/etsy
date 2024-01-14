@@ -264,7 +264,7 @@ const Consequences = () => {
           </div>
   
           <div className="mt-4 w-full bg-slate-300 flex flex-wrap justify-between">
-            <div className="ml-4 flex flex-col justify-start w-full sm:w-1/2 md:w-1/3">
+            <div className="flex flex-col justify-start w-full sm:w-1/2 md:w-1/3">
               <div className="flex justify-between mt-2 mb-2">
                 <div>Profit Margin <p>Total Profit / Total Revenue</p></div>
                 <div className="flex items-center">{isFinite(parseFloat(usProfitMargin.toFixed(2))) === false ? 0 : parseFloat(usProfitMargin.toFixed(2))} %</div>
