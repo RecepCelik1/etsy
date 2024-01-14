@@ -50,7 +50,7 @@ function App() {
 
   return (
     <div className="  h-full flex justify-center bg-[#282c34]">
-      <div className="w-full md:w-1/6 lg:w-2/6 xl:w-3/6 h-full flex flex-col items-center mr-1 ml-1">
+      <div className="w-full md:w-1/6 lg:w-2/6 xl:w-3/6 h-full flex flex-col items-center mr-2 ml-2">
   
         <div className="price w-full mt-10 md:mt-36 flex flex-col md:flex-row justify-between">
   
