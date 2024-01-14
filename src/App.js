@@ -57,22 +57,22 @@ function App() {
           <div className="w-full md:w-4/5 flex flex-col items-center bg-slate-300 mb-4 md:mb-0">
             <div className="flex justify-between mt-3 mb-3">
               <span className="mr-2 md:mr-12 w-full md:w-auto">Item Sold Price</span>
-              <input type="text" className="w-16 md:w-auto mr-1 md:ml-12" onChange={(e) => handleInputChange(e, "soldPrice")}></input>
+              <input type="text" className="w-16 md:w-auto mr-1 md:ml-12 p-1" onChange={(e) => handleInputChange(e, "soldPrice")}></input>
             </div>
             <div className="flex justify-between mt-3 mb-3">
               <span className="mr-2 md:mr-12">Item Cost</span>
-              <input type="text" className="w-16 md:w-auto mr-1 md:ml-12" onChange={(e) => handleInputChange(e, "itemCost")}></input>
+              <input type="text" className="w-16 md:w-auto mr-1 md:ml-12 p-1" onChange={(e) => handleInputChange(e, "itemCost")}></input>
             </div>
           </div>
   
           <div className="w-full md:w-4/5 flex flex-col items-center bg-slate-300 md:ml-2">
             <div className="flex justify-between mt-3 mb-3">
               <span className="mr-2 md:mr-12">Shipping Charge</span>
-              <input type="text" className="w-16 md:w-auto mr-1 md:ml-12" onChange={(e) => handleInputChange(e, "shippingCharge")}></input>
+              <input type="text" className="w-16 md:w-auto mr-1 md:ml-12 p-1" onChange={(e) => handleInputChange(e, "shippingCharge")}></input>
             </div>
             <div className="flex justify-between mt-3 mb-3">
               <span className="mr-2 md:mr-12">Shipping Cost</span>
-              <input type="text" className="w-16 md:w-auto mr-1 md:ml-12" onChange={(e) => handleInputChange(e, "shippingCost")}></input>
+              <input type="text" className="w-16 md:w-auto mr-1 md:ml-12 p-1" onChange={(e) => handleInputChange(e, "shippingCost")}></input>
             </div>
           </div>
   
