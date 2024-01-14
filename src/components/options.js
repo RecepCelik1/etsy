@@ -100,9 +100,11 @@ const Options = () => {
 
       return (
         <div className="mt-4 w-full flex justify-center">
-      
-          <div className="flex flex-col items-start w-full bg-slate-300 ml-2">
-           
+        
+          {/* Left section */}
+          <div className="flex flex-col items-start w-full bg-slate-300">
+            
+            {/* Seller Location */}
             <div className='flex justify-between mt-2 mb-4'>
               <div className='mr-4 flex items-center'>Seller Location</div>
               <Select
@@ -118,7 +120,7 @@ const Options = () => {
               />
             </div>
       
-
+            {/* Shop Currency */}
             <div className='flex justify-between'>
               <div className='flex items-center mr-4'>Shop Currency is Different</div>
               <div className="flex items-center">
@@ -137,6 +139,7 @@ const Options = () => {
               </div>
             </div>
       
+            {/* International Sale */}
             <div className='flex justify-between mt-2 mb-2'>
               <div className='flex items-center mr-4'>International Sale</div>
               <div className="flex items-center">
@@ -155,8 +158,8 @@ const Options = () => {
               </div>
             </div>
       
+            {/* Offsite Ads */}
             <div className='flex flex-col items-center mt-2 mb-2'>
-           
               <div className='flex justify-between mt-2 mb-2'>
                 <div className='flex items-center mr-4'>Using Offsite Ads</div>
                 <div className="flex items-center">
@@ -175,7 +178,7 @@ const Options = () => {
                 </div>
               </div>
       
-        
+              {/* Sales in Past 365 Days */}
               {offSiteAddisOn && (
                 <div className='flex justify-center'>
                   <div className='mr-'>Sales in Past 365 Days</div>
@@ -198,115 +201,112 @@ const Options = () => {
             </div>
           </div>
       
-        
+          {/* Vertical Line */}
           <div className="flex justify-center bg-slate-300">
             <div className="vertical-line h-full border-r border-black "></div>
           </div>
       
-
-
-            {selectedCurrency.value === "US" && (
-              <div className="flex flex-col w-full bg-slate-300 mr-2">
-          
-             
-                <div className='flex flex-col mt-2 mb-2'>
-                  <div className='flex justify-between'>
-                    <div>Sales Tax</div>
-                    <div className="flex items-center">
-                      <button
-                        onClick={(e) => toggleSwitch(e, "isTax")}
-                        className={`relative inline-flex items-center cursor-pointer focus:outline-none w-12 ${
-                          taxisOn ? 'bg-green-500' : 'bg-red-500'
-                        } text-white px-2 py-1 rounded-full`}
-                      >
-                        <span
-                          className={`${
-                            taxisOn ? 'translate-x-full' : 'translate-x-0'
-                          } inline-block w-4 h-4 mt-1 mb-1 bg-white rounded-full transform transition-transform`}
-                        />
-                      </button>
-                    </div>
-                  </div>
-          
-               
-                  {taxisOn && (
-                    <div className='flex justify-between mt-2 relative'>
-                      <label>Enter Percentage</label>
-                      <input className='w-[64px]' onChange={e => parsingFunction(e, "taxField")} value={TaxRate === 0 ? "" : TaxRate}></input>
-                      <span className='absolute right-0'>%</span>
-                    </div>
-                  )}
-                </div>
-          
-         
-                <div className='flex flex-col mt-2 mb-2'>
-                  <div className='flex justify-between'>
-                    <div>Other Cost</div>
-                    <div className="flex items-center">
-                      <button
-                        onClick={(e) => toggleSwitch(e, "isCost")}
-                        className={`relative inline-flex items-center cursor-pointer focus:outline-none w-12 ${
-                          otherCostsisOn ? 'bg-green-500' : 'bg-red-500'
-                        } text-white px-2 py-1 rounded-full`}
-                      >
-                        <span
-                          className={`${
-                            otherCostsisOn ? 'translate-x-full' : 'translate-x-0'
-                          } inline-block w-4 h-4 mt-1 mb-1 bg-white rounded-full transform transition-transform`}
-                        />
-                      </button>
-                    </div>
-                  </div>
-          
-               
-                  {otherCostsisOn && (
-                    <div className='flex justify-between mt-2 '>
-                      <input className='w-full mr-2 ml-2 h-8 p-2' placeholder='Enter other costs'
-                        onChange={e => parsingFunction(e, "costsField")} value={CostValue === 0 ? "" : CostValue}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>)}
+          {/* Right section */}
+          {selectedCurrency.value === "US" && (
+            <div className="flex flex-col w-full bg-slate-300">
               
-              {/* UK alanı */}
-
-              {selectedCurrency.value === "UK" && (
-                
-                <div className="flex flex-col w-full bg-slate-300 mr-2">
-
-<div className='flex flex-col mt-2 mb-2'>
-
-                  <div className='flex justify-between'>
-                    <div>Vat on Revenue</div>
-                    <div className="flex items-center">
-                      <button
-                        onClick={(e) => toggleSwitch(e, "UkVat")}
-                        className={`relative inline-flex items-center cursor-pointer focus:outline-none w-12 ${
-                          UkVat ? 'bg-green-500' : 'bg-red-500'
-                        } text-white px-2 py-1 rounded-full`}
-                      >
-                        <span
-                          className={`${
-                            UkVat ? 'translate-x-full' : 'translate-x-0'
-                          } inline-block w-4 h-4 mt-1 mb-1 bg-white rounded-full transform transition-transform`}
-                        />
-                      </button>
-                    </div>
+              {/* Sales Tax */}
+              <div className='flex flex-col mt-2 mb-2'>
+                <div className='flex justify-between'>
+                  <div>Sales Tax</div>
+                  <div className="flex items-center">
+                    <button
+                      onClick={(e) => toggleSwitch(e, "isTax")}
+                      className={`relative inline-flex items-center cursor-pointer focus:outline-none w-12 ${
+                        taxisOn ? 'bg-green-500' : 'bg-red-500'
+                      } text-white px-2 py-1 rounded-full`}
+                    >
+                      <span
+                        className={`${
+                          taxisOn ? 'translate-x-full' : 'translate-x-0'
+                        } inline-block w-4 h-4 mt-1 mb-1 bg-white rounded-full transform transition-transform`}
+                      />
+                    </button>
                   </div>
-          
-                  
-                  {UkVat && (
+                </div>
+                
+                {/* Enter Percentage */}
+                {taxisOn && (
+                  <div className='flex justify-between mt-2 relative'>
+                    <label>Enter Percentage</label>
+                    <input className='w-[64px]' onChange={e => parsingFunction(e, "taxField")} value={TaxRate === 0 ? "" : TaxRate}></input>
+                    <span className='absolute right-0'>%</span>
+                  </div>
+                )}
+              </div>
+              
+              {/* Other Cost */}
+              <div className='flex flex-col mt-2 mb-2'>
+                <div className='flex justify-between'>
+                  <div>Other Cost</div>
+                  <div className="flex items-center">
+                    <button
+                      onClick={(e) => toggleSwitch(e, "isCost")}
+                      className={`relative inline-flex items-center cursor-pointer focus:outline-none w-12 ${
+                        otherCostsisOn ? 'bg-green-500' : 'bg-red-500'
+                      } text-white px-2 py-1 rounded-full`}
+                    >
+                      <span
+                        className={`${
+                          otherCostsisOn ? 'translate-x-full' : 'translate-x-0'
+                        } inline-block w-4 h-4 mt-1 mb-1 bg-white rounded-full transform transition-transform`}
+                      />
+                    </button>
+                  </div>
+                </div>
+                
+                {/* Enter Other Costs */}
+                {otherCostsisOn && (
+                  <div className='flex justify-between mt-2 '>
+                    <input className='w-full mr-2 ml-2 h-8 p-2' placeholder='Enter other costs'
+                      onChange={e => parsingFunction(e, "costsField")} value={CostValue === 0 ? "" : CostValue}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
                     
-                    <div className='flex flex-col'>
-                      <div className='flex justify-between mt-2 relative'>
+          {/* UK area */}
+          {selectedCurrency.value === "UK" && (
+            <div className="flex flex-col w-full bg-slate-300">
+      
+              {/* VAT on Revenue */}
+              <div className='flex flex-col mt-2 mb-2'>
+                <div className='flex justify-between'>
+                  <div>Vat on Revenue</div>
+                  <div className="flex items-center">
+                    <button
+                      onClick={(e) => toggleSwitch(e, "UkVat")}
+                      className={`relative inline-flex items-center cursor-pointer focus:outline-none w-12 ${
+                        UkVat ? 'bg-green-500' : 'bg-red-500'
+                      } text-white px-2 py-1 rounded-full`}
+                    >
+                      <span
+                        className={`${
+                          UkVat ? 'translate-x-full' : 'translate-x-0'
+                        } inline-block w-4 h-4 mt-1 mb-1 bg-white rounded-full transform transition-transform`}
+                      />
+                    </button>
+                  </div>
+                </div>
+                
+                {/* Enter Percentage and VAT Inclusive */}
+                {UkVat && (
+                  <div className='flex flex-col'>
+                    <div className='flex justify-between mt-2 relative'>
                       <label>Enter Percentage</label>
                       <input className='w-[64px]' onChange={e => parsingFunction(e, "UkVatRateFunc")} value={isNaN(UkVatRate) ? "" : UkVatRate}></input>
                       <span className='absolute right-0'>%</span>
-                      </div>
-
-                      <div className="flex justify-between mt-3">
-                        <div>Revenue Iclusive of VAT</div>
+                    </div>
+      
+                    <div className="flex justify-between mt-3">
+                      <div>Revenue Inclusive of VAT</div>
                       <button
                         onClick={(e) => toggleSwitch(e, "UkVatInclusive")}
                         className={`relative inline-flex items-center cursor-pointer focus:outline-none w-12 ${
@@ -319,75 +319,73 @@ const Options = () => {
                           } inline-block w-4 h-4 mt-1 mb-1 bg-white rounded-full transform transition-transform`}
                         />
                       </button>
-
-                    </div>
-                    </div>
-                  )}
-
-                  <div className='flex justify-between mt-4'>
-                    <div>VAT on Fees</div>
-                    <div className="flex items-center">
-                      <button
-                        onClick={(e) => toggleSwitch(e, "VatOnFees")}
-                        className={`relative inline-flex items-center cursor-pointer focus:outline-none w-12 ${
-                          VatOnFees ? 'bg-green-500' : 'bg-red-500'
-                        } text-white px-2 py-1 rounded-full`}
-                      >
-                        <span
-                          className={`${
-                            VatOnFees ? 'translate-x-full' : 'translate-x-0'
-                          } inline-block w-4 h-4 mt-1 mb-1 bg-white rounded-full transform transition-transform`}
-                        />
-                      </button>
                     </div>
                   </div>
-
-                  {VatOnFees && (
-                    <div className='flex justify-between mt-2 relative'>
+                )}
+      
+                {/* VAT on Fees */}
+                <div className='flex justify-between mt-4'>
+                  <div>VAT on Fees</div>
+                  <div className="flex items-center">
+                    <button
+                      onClick={(e) => toggleSwitch(e, "VatOnFees")}
+                      className={`relative inline-flex items-center cursor-pointer focus:outline-none w-12 ${
+                        VatOnFees ? 'bg-green-500' : 'bg-red-500'
+                      } text-white px-2 py-1 rounded-full`}
+                    >
+                      <span
+                        className={`${
+                          VatOnFees ? 'translate-x-full' : 'translate-x-0'
+                        } inline-block w-4 h-4 mt-1 mb-1 bg-white rounded-full transform transition-transform`}
+                      />
+                    </button>
+                  </div>
+                </div>
+      
+                {/* Enter VAT on Fees Percentage */}
+                {VatOnFees && (
+                  <div className='flex justify-between mt-2 relative'>
                     <label>Enter Percentage</label>
                     <input className='w-[64px]' onChange={e => parsingFunction(e, "FeeVatRate")} value={isNaN(vatFeeRate) ? "" : vatFeeRate}></input>
                     <span className='absolute right-0'>%</span>
-                    </div>
-                  )}
-
-                </div>
-
-                <div className='flex flex-col mt-2 mb-2'>
-                  <div className='flex justify-between'>
-                    <div>Other Cost</div>
-                    <div className="flex items-center">
-                      <button
-                        onClick={(e) => toggleSwitch(e, "ukCostBool")}
-                        className={`relative inline-flex items-center cursor-pointer focus:outline-none w-12 ${
-                          ukCostBool ? 'bg-green-500' : 'bg-red-500'
-                        } text-white px-2 py-1 rounded-full`}
-                      >
-                        <span
-                          className={`${
-                            ukCostBool ? 'translate-x-full' : 'translate-x-0'
-                          } inline-block w-4 h-4 mt-1 mb-1 bg-white rounded-full transform transition-transform`}
-                        />
-                      </button>
-                    </div>
                   </div>
-          
-               
-                  {ukCostBool && (
-                    <div className='flex justify-between mt-2 '>
-                      <input className='w-full mr-2 ml-2 h-8 p-2' placeholder='Enter other costs'
-                        onChange={e => parsingFunction(e, "ukCosts")} value={isNaN(ukCosts) ? "" : ukCosts}
-                      />
-                    </div>
-                  )}
-                </div>
-
+                )}
               </div>
-
-              )}
-              
-
+      
+              {/* Other Cost for UK */}
+              <div className='flex flex-col mt-2 mb-2'>
+                <div className='flex justify-between'>
+                  <div>Other Cost</div>
+                  <div className="flex items-center">
+                    <button
+                      onClick={(e) => toggleSwitch(e, "ukCostBool")}
+                      className={`relative inline-flex items-center cursor-pointer focus:outline-none w-12 ${
+                        ukCostBool ? 'bg-green-500' : 'bg-red-500'
+                      } text-white px-2 py-1 rounded-full`}
+                    >
+                      <span
+                        className={`${
+                          ukCostBool ? 'translate-x-full' : 'translate-x-0'
+                        } inline-block w-4 h-4 mt-1 mb-1 bg-white rounded-full transform transition-transform`}
+                      />
+                    </button>
+                  </div>
+                </div>
+                
+                {/* Enter Other Costs for UK */}
+                {ukCostBool && (
+                  <div className='flex justify-between mt-2 '>
+                    <input className='w-full mr-2 ml-2 h-8 p-2' placeholder='Enter other costs'
+                      onChange={e => parsingFunction(e, "ukCosts")} value={isNaN(ukCosts) ? "" : ukCosts}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       );
+      
       
 } 
 

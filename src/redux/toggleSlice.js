@@ -2,16 +2,17 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   differentCurrency : false,
+  currencyDifferenceRate : 0,
   internationalSale : false,
   offSiteAds : false,
-  salesTaxBool : false,
-  otherCostBool : false,
   underOrOver10kUsd : 0,
-
+  
+  
+  salesTaxBool : false,
   salesTax : 0,
+  otherCostBool : false,
   otherCost : 0,
-  currencyDifferenceRate : 0,
-
+  
   UkVat : false,
   UkVatRate : 0,
   UkVatInclusive : false,

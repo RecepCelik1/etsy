@@ -1,21 +1,42 @@
-import React from 'react';
+import { 
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend
+} from 'chart.js';
+
 import { Doughnut } from 'react-chartjs-2';
+
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend
+);
 
 const PieChart = () => {
   const data = {
-    labels: ['Kategori 1', 'Kategori 2', 'Kategori 3'],
-    datasets: [
-      {
-        data: [30, 40, 30],
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-      },
-    ],
-  };
+    labels : ['Yes' , 'No'],
+    datasets : [{
+      label : 'Poll',
+      data : [ 3 , 6 ],
+      backgroundColor : ['black' , 'red'],
+      borderColor : ['black' , 'red'],
+    }]
+  }
+
+  const options = {
+
+  }
 
   return (
-    <div className="w-64 h-64">
-      <Doughnut data={data} />
+    <div className="App">
+      <div className='flex w-48 h-48'>
+      <Doughnut
+        data = {data}
+        options={options}
+      ></Doughnut>
+      </div>
+     
     </div>
   );
 };
