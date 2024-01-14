@@ -49,8 +49,8 @@ function App() {
   };
 
   return (
-    <div className="  h-full flex justify-center">
-      <div className="w-full md:w-1/6 lg:w-2/6 xl:w-3/6 h-full bg-slate-500 flex flex-col items-center ">
+    <div className="  h-full flex justify-center bg-[#282c34]">
+      <div className="w-full md:w-1/6 lg:w-2/6 xl:w-3/6 h-full flex flex-col items-center ">
   
         <div className="price w-full mt-10 md:mt-36 flex flex-col md:flex-row justify-between">
   
@@ -80,7 +80,7 @@ function App() {
   
         <Options />
   
-        <div className="mt-4 flex justify-center">
+        <div className="mt-4 flex justify-center bg-slate-300 font-bold w-full">
           Estimated Results
         </div>
   
