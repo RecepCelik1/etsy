@@ -120,14 +120,10 @@ const Consequences = () => {
   let ukBreakEvenPrice = 0
   
   //şu anlık çalışmıyor
-  if(UkVatInclusive === false) {
-    ukBreakEvenPrice = 1000*(ukCostWithoutFees + ukEtsyListingFee + 0.2 + ((2*vatFeeRate)/100)) / 
-    (-325 - (13,25*vatFeeRate) - 100*offSiteAdsRate - 100*ukVatRate - vatFeeRate*offSiteAdsRate) + ukBreakEvenPrice
-  } else {
-    ukBreakEvenPrice = 1000*(ukCostWithoutFees + ukEtsyListingFee + 0.2 + ((2*vatFeeRate)/100)) / 
-    (-325 - (13,25*vatFeeRate) - 100*offSiteAdsRate - 100*(100/((100+ukVatRate) + (ukVatRate/100))) - vatFeeRate*offSiteAdsRate)
-    + ukBreakEvenPrice
-  }
+// Corrected
+ukBreakEvenPrice = 1000 * (ukCostWithoutFees + ukEtsyListingFee + 0.2 + ((2 * vatFeeRate) / 100)) / 
+ (-325 - (13.25 * vatFeeRate) - 100 * offSiteAdsRate - 100 * (100 / ((100 + ukVatRate) + (ukVatRate / 100))) - vatFeeRate * offSiteAdsRate)
+
 
   let ukAverageFeeRate = (ukTotalFees / itemMarketSoldPrice) * 100
 
@@ -175,7 +171,7 @@ const Consequences = () => {
             <div className="mt-2 mb-2 w-full h-full flex justify-end bg-slate-300 items-center">{parseFloat(ukTotalProfitPerItem.toFixed(2))}</div>
           </div>
   
-          <div className="mt-4 w-full bg-slate-300 flex flex-wrap justify-between">
+          <div className="mt-4 w-full bg-slate-300 flex flex-wrap items-center">
             <div className="ml-4 flex flex-col justify-start w-full sm:w-1/2 md:w-1/3">
               <div className="flex justify-between mt-2 mb-2">
                 <div>Profit Margin <p>Total Profit / Total Revenue</p></div>
