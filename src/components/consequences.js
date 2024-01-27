@@ -22,7 +22,11 @@ const Consequences = () => {
   const selectedCountry = useSelector(state => state.country.country);
 
   let currencies = useSelector(state => state.currency.currency)
-  let GBP = currencies.data?.GBP
+  //let GBP = currencies.data?.GBP
+  //GBP = parseFloat(GBP?.toFixed(1))
+  let GBP = 0.7868
+  console.log("GBP : " , GBP)
+
   const itemSoldPRice = useSelector(state => state.price.soldPrice);
   const itemCost = useSelector(state => state.price.cost);
   const shippingCharge = useSelector(state => state.price.shippingCharge);
@@ -49,7 +53,7 @@ const Consequences = () => {
   console.log("ukOffSiteAds : " , ukOffSiteAds)
 
   let transictionFee = ((itemMarketSoldPrice * 65) / 1000)
-
+  transictionFee = parseFloat(transictionFee.toFixed(2))
 
   let currencyDifference = ((itemMarketSoldPrice * currenyDifferenceRate) / 100)
   currencyDifference = parseFloat(currencyDifference.toFixed(2))
@@ -61,24 +65,31 @@ const Consequences = () => {
   const usOtherCosts = useSelector(state => state.toggle.otherCost)
 
   let usSalesTax = ((itemMarketSoldPrice * salesTaxRate)/100) * 3/100
+  usSalesTax = parseFloat(usSalesTax.toFixed(2))
 
   let usEtsyPaymentFee = ((itemMarketSoldPrice * 3) / 100) + (25/100) + currencyDifference + usSalesTax
   parseFloat(usEtsyPaymentFee.toFixed(2))
 
   let usTotalFees = etsyListingFee + usEtsyPaymentFee + transictionFee + offSiteAdds
+  usTotalFees = parseFloat(usTotalFees.toFixed(2))
 
   let usCostsWithoutFees = itemCost + shippingCost + usOtherCosts
+  usCostsWithoutFees = parseFloat(usCostsWithoutFees.toFixed(2))
 
   let usTotalProfitPerItem = itemMarketSoldPrice - (usCostsWithoutFees + usTotalFees)
-
+  usTotalProfitPerItem = parseFloat(usTotalProfitPerItem.toFixed(2))
+  
   let usProfitMargin = (usTotalProfitPerItem / itemMarketSoldPrice) * 100
+  usProfitMargin = parseFloat(usProfitMargin.toFixed(2))
 
   let usReturnOnCost = (usTotalProfitPerItem / itemCost) * 100
-
-  let usBreakEvenPrice = ((usCostsWithoutFees + 45/100) * 100)/(88 - (3 * salesTaxRate) - offSiteAdds)
+  usReturnOnCost = parseFloat(usReturnOnCost.toFixed(2))
 
   let usAverageFeeRate = (usTotalFees / itemMarketSoldPrice) * 100
+  usAverageFeeRate = parseFloat(usAverageFeeRate.toFixed(2))
 
+  let usBreakEvenPrice = ((usCostsWithoutFees + 0.45) * 100)/(90.5 - (3 * salesTaxRate) - offSiteAdds)
+  usBreakEvenPrice = parseFloat(usBreakEvenPrice.toFixed(2))
 
   // for United Kingdom
 
@@ -88,6 +99,7 @@ const Consequences = () => {
   const ukCosts = useSelector(state => state.toggle.ukCosts)
   //ukOffSiteAds unutma
   let ukEtsyListingFee = etsyListingFee * GBP
+  ukEtsyListingFee = parseFloat(ukEtsyListingFee.toFixed(2))
   //transictionFee
 
   let ukVatOnRevenue = 0
@@ -100,35 +112,39 @@ const Consequences = () => {
 
 
   let ukEtsyPaymentFee = (itemMarketSoldPrice * (425/10000)) + 20/100 + currencyDifference
+  ukEtsyPaymentFee = parseFloat(ukEtsyPaymentFee.toFixed(2))
   
   let ukTotalFees = ukEtsyListingFee + ukEtsyPaymentFee + transictionFee + ukOffSiteAds
+  ukTotalFees = parseFloat(ukTotalFees.toFixed(2))
 
   let ukVatOnFees = (ukTotalFees * vatFeeRate) / 100
+  ukVatOnFees = parseFloat(ukVatOnFees.toFixed(2))
 
   let ukCostWithoutFees = itemCost + shippingCost + ukCosts
+  ukCostWithoutFees = parseFloat(ukCostWithoutFees.toFixed(2))
 
   let ukTotalVats = ukVatOnRevenue + ukVatOnFees
+  ukTotalVats = parseFloat(ukTotalVats.toFixed(2))
 
   let ukTotalProfitPerItem = itemMarketSoldPrice - (ukCostWithoutFees + ukTotalFees + ukTotalVats)
+  ukTotalProfitPerItem = parseFloat(ukTotalProfitPerItem.toFixed(2))
 
   let ukProfitMargin = (ukTotalProfitPerItem / itemMarketSoldPrice) * 100
+  ukProfitMargin = parseFloat(ukProfitMargin.toFixed(2))
 
   let ukReturnOnCost = (ukTotalProfitPerItem / itemCost) * 100
-
-  console.log("ukTotalProfitPerItem : " , ukTotalProfitPerItem , "ukCostWithoutFees : " , ukCostWithoutFees , "ukReturnOnCost : " , ukReturnOnCost)
+  ukReturnOnCost = parseFloat(ukReturnOnCost.toFixed(2))
 
   let ukBreakEvenPrice = 0
-  
-  //şu anlık çalışmıyor
-// Corrected
-ukBreakEvenPrice = 1000 * (ukCostWithoutFees + ukEtsyListingFee + 0.2 + ((2 * vatFeeRate) / 100)) / 
- (-325 - (13.25 * vatFeeRate) - 100 * offSiteAdsRate - 100 * (100 / ((100 + ukVatRate) + (ukVatRate / 100))) - vatFeeRate * offSiteAdsRate)
-
 
   let ukAverageFeeRate = (ukTotalFees / itemMarketSoldPrice) * 100
+  ukAverageFeeRate = parseFloat(ukAverageFeeRate.toFixed(2))
 
   let usChartProfitSlice = usProfitMargin
   usChartProfitSlice = parseFloat(usChartProfitSlice.toFixed(2))
+
+  ukBreakEvenPrice = ((ukCostWithoutFees + ukEtsyListingFee + 0.20)*1000)/(894 - 10*offSiteAdsRate - 10*ukVatRate - 15*vatFeeRate - offSiteAdsRate*vatFeeRate - ukVatRate*vatFeeRate - 10*ukEtsyListingFee)
+
   if(usChartProfitSlice < 0){
     usChartProfitSlice = 0
   }
@@ -144,6 +160,7 @@ ukBreakEvenPrice = 1000 * (ukCostWithoutFees + ukEtsyListingFee + 0.2 + ((2 * va
 
   let ukChartProfitSlice = ukProfitMargin
   ukChartProfitSlice = parseFloat(ukChartProfitSlice.toFixed(2))
+
   if(ukChartProfitSlice < 0){
     ukChartProfitSlice = 0
   }
