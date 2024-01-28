@@ -53,10 +53,10 @@ const Consequences = () => {
   console.log("ukOffSiteAds : " , ukOffSiteAds)
 
   let transictionFee = ((itemMarketSoldPrice * 65) / 1000)
-  transictionFee = parseFloat(transictionFee.toFixed(2))
+  //transictionFee = parseFloat(transictionFee.toFixed(2))
 
   let currencyDifference = ((itemMarketSoldPrice * currenyDifferenceRate) / 100)
-  currencyDifference = parseFloat(currencyDifference.toFixed(2))
+  //currencyDifference = parseFloat(currencyDifference.toFixed(2))
 
 
   //for United States 
@@ -65,16 +65,16 @@ const Consequences = () => {
   const usOtherCosts = useSelector(state => state.toggle.otherCost)
 
   let usSalesTax = ((itemMarketSoldPrice * salesTaxRate)/100) * 3/100
-  usSalesTax = parseFloat(usSalesTax.toFixed(2))
+  //usSalesTax = parseFloat(usSalesTax.toFixed(2))
 
   let usEtsyPaymentFee = ((itemMarketSoldPrice * 3) / 100) + (25/100) + currencyDifference + usSalesTax
-  parseFloat(usEtsyPaymentFee.toFixed(2))
+  //parseFloat(usEtsyPaymentFee.toFixed(2))
 
   let usTotalFees = etsyListingFee + usEtsyPaymentFee + transictionFee + offSiteAdds
-  usTotalFees = parseFloat(usTotalFees.toFixed(2))
+  //usTotalFees = parseFloat(usTotalFees.toFixed(2))
 
   let usCostsWithoutFees = itemCost + shippingCost + usOtherCosts
-  usCostsWithoutFees = parseFloat(usCostsWithoutFees.toFixed(2))
+  //usCostsWithoutFees = parseFloat(usCostsWithoutFees.toFixed(2))
 
   let usTotalProfitPerItem = itemMarketSoldPrice - (usCostsWithoutFees + usTotalFees)
   usTotalProfitPerItem = parseFloat(usTotalProfitPerItem.toFixed(2))
@@ -88,8 +88,20 @@ const Consequences = () => {
   let usAverageFeeRate = (usTotalFees / itemMarketSoldPrice) * 100
   usAverageFeeRate = parseFloat(usAverageFeeRate.toFixed(2))
 
-  let usBreakEvenPrice = ((usCostsWithoutFees + 0.45) * 100)/(90.5 - (3 * salesTaxRate) - offSiteAdds)
+  let usBreakEvenPrice = 0
+
+  if(offSiteAdsRate === 12 && usCostsWithoutFees >= 833.33*((9050-100*currenyDifferenceRate-3*salesTaxRate-100*offSiteAdsRate))/(100*100)){
+    usBreakEvenPrice = ((usCostsWithoutFees + 0.45 + 100)*(100*100))/(9050-100*currenyDifferenceRate-3*salesTaxRate)
+  } 
+  else if(offSiteAdsRate === 15 && usCostsWithoutFees >= 666.66*((9050-100*currenyDifferenceRate-3*salesTaxRate-100*offSiteAdsRate))/(100*100)){
+    usBreakEvenPrice = ((usCostsWithoutFees + 0.45 + 100)*(100*100))/(9050-100*currenyDifferenceRate-3*salesTaxRate)
+  }  
+  else {
+    usBreakEvenPrice = ((usCostsWithoutFees + 0.45)*(100*100))/(9050-100*currenyDifferenceRate-3*salesTaxRate-100*offSiteAdsRate)
+  }  
+
   usBreakEvenPrice = parseFloat(usBreakEvenPrice.toFixed(2))
+  
 
   // for United Kingdom
 
@@ -143,7 +155,9 @@ const Consequences = () => {
   let usChartProfitSlice = usProfitMargin
   usChartProfitSlice = parseFloat(usChartProfitSlice.toFixed(2))
 
-  ukBreakEvenPrice = ((ukCostWithoutFees + ukEtsyListingFee + 0.20)*1000)/(894 - 10*offSiteAdsRate - 10*ukVatRate - 15*vatFeeRate - offSiteAdsRate*vatFeeRate - ukVatRate*vatFeeRate - 10*ukEtsyListingFee)
+  ukBreakEvenPrice = ((ukCostWithoutFees + 0.20*GBP + (0.2*vatFeeRate)/10000 + (0.2*GBP*vatFeeRate)/10000)*10000)/(8925-100*currenyDifferenceRate - 4.25*vatFeeRate - 6.5*vatFeeRate - currenyDifferenceRate*vatFeeRate - offSiteAdsRate*vatFeeRate-ukVatRate*vatFeeRate - 100*offSiteAdsRate - 100*ukVatRate)
+  
+  ukBreakEvenPrice = parseFloat(ukBreakEvenPrice.toFixed(2))
 
   if(usChartProfitSlice < 0){
     usChartProfitSlice = 0
@@ -200,7 +214,7 @@ const Consequences = () => {
               </div>
               <div className=" flex justify-between mt-2 mb-2">
                 <div className="font-bold">Breakeven Price</div>
-                <div className="flex items-center">{parseFloat(ukBreakEvenPrice.toFixed(2))}</div>
+                <div className="flex items-center">{ukBreakEvenPrice}</div>
               </div>
               <div className="vertical-line w-full border-t border-black "></div>
               <div className=" flex justify-between mt-2 mb-2">
@@ -273,7 +287,7 @@ const Consequences = () => {
         <div className="w-full flex flex-col items-center">
           <div className="mt-4 flex w-full justify-center">
             <div className="mt-2 mb-2 w-full h-full bg-slate-300 flex items-center">Total Profit Per Item</div>
-            <div className="mt-2 mb-2 w-full h-full flex justify-end bg-slate-300 items-center">{parseFloat(usTotalProfitPerItem.toFixed(2))}</div>
+            <div className="mt-2 mb-2 w-full h-full flex justify-end bg-slate-300 items-center">{usTotalProfitPerItem}</div>
           </div>
   
           <div className="mt-4 w-full bg-slate-300 flex flex-wrap justify-between">
@@ -288,12 +302,12 @@ const Consequences = () => {
               </div>
               <div className=" flex justify-between mt-2 mb-2">
                 <div className="font-bold">Breakeven Price</div>
-                <div className="flex items-center">{parseFloat(usBreakEvenPrice.toFixed(2))}</div>
+                <div className="flex items-center">{usBreakEvenPrice}</div>
               </div>
               <div className="vertical-line w-full border-t border-black "></div>
               <div className=" flex justify-between mt-2 mb-2">
                 <div className="font-bold">Total Fees</div>
-                <div className="flex items-center">{usTotalFees}</div>
+                <div className="flex items-center">{parseFloat(usTotalFees.toFixed(2))}</div>
               </div>
               <div className=" flex justify-between mt-2 mb-2">
                 <div>Average Fee Rate<p>Total Fees / Total Revenue</p></div>
@@ -329,7 +343,7 @@ const Consequences = () => {
             </div>
             <div className=" flex justify-between mt-2 mb-2">
               <div>Etsy Payment Fee</div>
-              <div className="flex items-center">$ {usEtsyPaymentFee}</div>
+              <div className="flex items-center">$ {parseFloat(usEtsyPaymentFee.toFixed(2))}</div>
             </div>
             <div className=" flex justify-between mt-2 mb-2">
               <div>Offsite Add Fee</div>
