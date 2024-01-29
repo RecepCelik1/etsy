@@ -83,10 +83,11 @@ const Consequences = () => {
   //parseFloat(usEtsyPaymentFee.toFixed(2))
 
   let usTotalFees = etsyListingFee + usEtsyPaymentFee + transictionFee + offSiteAdds
-  //usTotalFees = parseFloat(usTotalFees.toFixed(2))
+  usTotalFees = parseFloat(usTotalFees.toFixed(2))
 
   let usCostsWithoutFees = itemCost + shippingCost + usOtherCosts
   //usCostsWithoutFees = parseFloat(usCostsWithoutFees.toFixed(2))
+  console.log("us shipping cost : " ,shippingCost , "us item cost : " , itemCost , "us other costs : " , usOtherCosts , "us total costs : " , usCostsWithoutFees)
 
   let usTotalProfitPerItem = itemMarketSoldPrice - (usCostsWithoutFees + usTotalFees)
   usTotalProfitPerItem = parseFloat(usTotalProfitPerItem.toFixed(2))
@@ -112,6 +113,7 @@ const Consequences = () => {
     usBreakEvenPrice = ((usCostsWithoutFees + 0.45)*(100*100))/(9050-100*currenyDifferenceRate-3*salesTaxRate-100*offSiteAdsRate)
   }  
 
+  usBreakEvenPrice = usBreakEvenPrice - shippingCharge
   usBreakEvenPrice = parseFloat(usBreakEvenPrice.toFixed(2))
   
 
@@ -204,6 +206,7 @@ const Consequences = () => {
 
   }
 
+  ukBreakEvenPrice = ukBreakEvenPrice - shippingCharge
   ukBreakEvenPrice = parseFloat(ukBreakEvenPrice.toFixed(2))
 
   if(usChartProfitSlice < 0){
