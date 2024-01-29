@@ -1,5 +1,17 @@
 import { useSelector } from "react-redux" 
 
+/* 
+
+      ukBreakEvenPrice = ((ukCostWithoutFees + ukEtsyListingFee + 0.20 + ((0.20*GBP*vatFeeRate)/(100)) +((0.2*vatFeeRate)/100))*10000) / (8925 - 100*currenyDifferenceRate - 100*offSiteAdsRate - ((100*100*ukVatRate)/(100 + ukVatRate)) - currenyDifferenceRate*vatFeeRate - offSiteAdsRate*vatFeeRate - 10.75*vatFeeRate) // vergi dahil breakeven
+
+*/
+
+/*
+
+    ukBreakEvenPrice = ((ukCostWithoutFees + ukEtsyListingFee + 0.20 + ((0.20*GBP*vatFeeRate)/(100)) +((0.2*vatFeeRate)/100))*10000) / (8925 - 100*currenyDifferenceRate - 100*offSiteAdsRate - 100*ukVatRate - currenyDifferenceRate*vatFeeRate - offSiteAdsRate*vatFeeRate - 10.75*vatFeeRate) // vergi dahil değil breakeven
+
+*/
+
 import { 
   Chart as ChartJS,
   ArcElement,
@@ -22,10 +34,8 @@ const Consequences = () => {
   const selectedCountry = useSelector(state => state.country.country);
 
   let currencies = useSelector(state => state.currency.currency)
-  //let GBP = currencies.data?.GBP
-  //GBP = parseFloat(GBP?.toFixed(1))
-  let GBP = 0.7868
-  console.log("GBP : " , GBP)
+  let GBP = currencies.data?.GBP
+  GBP = parseFloat(GBP?.toFixed(1))
 
   const itemSoldPRice = useSelector(state => state.price.soldPrice);
   const itemCost = useSelector(state => state.price.cost);
@@ -46,8 +56,10 @@ const Consequences = () => {
 
   if(offSiteAdds > 100) {
     offSiteAdds = 100
-    ukOffSiteAds = 0
-    ukOffSiteAds = offSiteAdds*GBP + ukOffSiteAds
+  }
+
+  if(ukOffSiteAds/GBP >= 100) {
+    ukOffSiteAds = 100*GBP
   }
 
   console.log("ukOffSiteAds : " , ukOffSiteAds)
@@ -117,32 +129,32 @@ const Consequences = () => {
   let ukVatOnRevenue = 0
 
   if(UkVatInclusive === true) {
-    ukVatOnRevenue = ((itemMarketSoldPrice * 100) / (100 + ukVatRate) * (ukVatRate / 100)) 
+    ukVatOnRevenue = ((itemMarketSoldPrice * 100) / (100 + ukVatRate) * (ukVatRate / 100))
   } else {
     ukVatOnRevenue = (itemMarketSoldPrice * ukVatRate)/100
   }
 
 
   let ukEtsyPaymentFee = (itemMarketSoldPrice * (425/10000)) + 20/100 + currencyDifference
-  ukEtsyPaymentFee = parseFloat(ukEtsyPaymentFee.toFixed(2))
+ // ukEtsyPaymentFee = parseFloat(ukEtsyPaymentFee.toFixed(2))
   
   let ukTotalFees = ukEtsyListingFee + ukEtsyPaymentFee + transictionFee + ukOffSiteAds
-  ukTotalFees = parseFloat(ukTotalFees.toFixed(2))
+  //ukTotalFees = parseFloat(ukTotalFees.toFixed(2))
 
   let ukVatOnFees = (ukTotalFees * vatFeeRate) / 100
-  ukVatOnFees = parseFloat(ukVatOnFees.toFixed(2))
+  //ukVatOnFees = parseFloat(ukVatOnFees.toFixed(2))
 
   let ukCostWithoutFees = itemCost + shippingCost + ukCosts
-  ukCostWithoutFees = parseFloat(ukCostWithoutFees.toFixed(2))
+  //ukCostWithoutFees = parseFloat(ukCostWithoutFees.toFixed(2))
 
   let ukTotalVats = ukVatOnRevenue + ukVatOnFees
-  ukTotalVats = parseFloat(ukTotalVats.toFixed(2))
+  //ukTotalVats = parseFloat(ukTotalVats.toFixed(2))
 
   let ukTotalProfitPerItem = itemMarketSoldPrice - (ukCostWithoutFees + ukTotalFees + ukTotalVats)
   ukTotalProfitPerItem = parseFloat(ukTotalProfitPerItem.toFixed(2))
 
   let ukProfitMargin = (ukTotalProfitPerItem / itemMarketSoldPrice) * 100
-  ukProfitMargin = parseFloat(ukProfitMargin.toFixed(2))
+  //ukProfitMargin = parseFloat(ukProfitMargin.toFixed(2))
 
   let ukReturnOnCost = (ukTotalProfitPerItem / itemCost) * 100
   ukReturnOnCost = parseFloat(ukReturnOnCost.toFixed(2))
@@ -155,8 +167,43 @@ const Consequences = () => {
   let usChartProfitSlice = usProfitMargin
   usChartProfitSlice = parseFloat(usChartProfitSlice.toFixed(2))
 
-  ukBreakEvenPrice = ((ukCostWithoutFees + 0.20*GBP + (0.2*vatFeeRate)/10000 + (0.2*GBP*vatFeeRate)/10000)*10000)/(8925-100*currenyDifferenceRate - 4.25*vatFeeRate - 6.5*vatFeeRate - currenyDifferenceRate*vatFeeRate - offSiteAdsRate*vatFeeRate-ukVatRate*vatFeeRate - 100*offSiteAdsRate - 100*ukVatRate)
-  
+  if (UkVatInclusive === true) {
+
+    if(offSiteAdsRate === 12 && ukCostWithoutFees >= (833.33*(8925 - 100*currenyDifferenceRate - 100*offSiteAdsRate - ((100*100*ukVatRate)/(100 + ukVatRate)) - currenyDifferenceRate*vatFeeRate - offSiteAdsRate*vatFeeRate - 10.75*vatFeeRate))/(100*100)) {
+
+      ukBreakEvenPrice = ((ukCostWithoutFees + ukEtsyListingFee + 100*GBP + (100*GBP*vatFeeRate / 100) + 0.20 + ((0.20*GBP*vatFeeRate)/(100)) +((0.2*vatFeeRate)/100))*10000) / (8925 - 100*currenyDifferenceRate - ((100*100*ukVatRate)/(100 + ukVatRate)) - currenyDifferenceRate*vatFeeRate - 10.75*vatFeeRate)
+
+    } else if(offSiteAdsRate === 15 && ukCostWithoutFees >= (666.66*(8925 - 100*currenyDifferenceRate - 100*offSiteAdsRate - ((100*100*ukVatRate)/(100 + ukVatRate)) - currenyDifferenceRate*vatFeeRate - offSiteAdsRate*vatFeeRate - 10.75*vatFeeRate))/(100*100)) {
+
+      ukBreakEvenPrice = ((ukCostWithoutFees + ukEtsyListingFee + 100*GBP + (100*GBP*vatFeeRate / 100) + 0.20 + ((0.20*GBP*vatFeeRate)/(100)) +((0.2*vatFeeRate)/100))*10000) / (8925 - 100*currenyDifferenceRate - ((100*100*ukVatRate)/(100 + ukVatRate)) - currenyDifferenceRate*vatFeeRate - 10.75*vatFeeRate)
+
+    } else {
+
+      ukBreakEvenPrice = ((ukCostWithoutFees + ukEtsyListingFee + 0.20 + ((0.20*GBP*vatFeeRate)/(100)) +((0.2*vatFeeRate)/100))*10000) / (8925 - 100*currenyDifferenceRate - 100*offSiteAdsRate - ((100*100*ukVatRate)/(100 + ukVatRate)) - currenyDifferenceRate*vatFeeRate - offSiteAdsRate*vatFeeRate - 10.75*vatFeeRate)
+
+    }
+
+    
+  } else {
+
+
+    if(offSiteAdsRate === 12 && ukCostWithoutFees >= (833.33*(8925 - 100*currenyDifferenceRate - 100*offSiteAdsRate - 100*ukVatRate - currenyDifferenceRate*vatFeeRate - offSiteAdsRate*vatFeeRate - 10.75*vatFeeRate))/(100*100)) {
+
+      ukBreakEvenPrice = ((ukCostWithoutFees + ukEtsyListingFee + 100*GBP + (100*GBP*vatFeeRate/100) + 0.20 + ((0.20*GBP*vatFeeRate)/(100)) +((0.2*vatFeeRate)/100))*10000) / (8925 - 100*currenyDifferenceRate - 100*ukVatRate - currenyDifferenceRate*vatFeeRate - 10.75*vatFeeRate)
+
+    } else if(offSiteAdsRate === 15 && ukCostWithoutFees >= (666.66*(8925 - 100*currenyDifferenceRate - 100*offSiteAdsRate - 100*ukVatRate - currenyDifferenceRate*vatFeeRate - offSiteAdsRate*vatFeeRate - 10.75*vatFeeRate))/(100*100)) {
+
+      ukBreakEvenPrice = ((ukCostWithoutFees + ukEtsyListingFee + 100*GBP + (100*GBP*vatFeeRate/100) + 0.20 + ((0.20*GBP*vatFeeRate)/(100)) +((0.2*vatFeeRate)/100))*10000) / (8925 - 100*currenyDifferenceRate - 100*ukVatRate - currenyDifferenceRate*vatFeeRate - 10.75*vatFeeRate)
+
+    } else {
+
+      ukBreakEvenPrice = ((ukCostWithoutFees + ukEtsyListingFee + 0.20 + ((0.20*GBP*vatFeeRate)/(100)) +((0.2*vatFeeRate)/100))*10000) / (8925 - 100*currenyDifferenceRate - 100*offSiteAdsRate - 100*ukVatRate - currenyDifferenceRate*vatFeeRate - offSiteAdsRate*vatFeeRate - 10.75*vatFeeRate)
+
+    }
+
+
+  }
+
   ukBreakEvenPrice = parseFloat(ukBreakEvenPrice.toFixed(2))
 
   if(usChartProfitSlice < 0){
@@ -199,7 +246,7 @@ const Consequences = () => {
         <div className="w-full flex flex-col items-center">
           <div className="mt-4 flex w-full justify-center">
             <div className="mt-2 mb-2 w-full h-full bg-slate-300 flex items-center">Total Profit Per Item</div>
-            <div className="mt-2 mb-2 w-full h-full flex justify-end bg-slate-300 items-center">{parseFloat(ukTotalProfitPerItem.toFixed(2))}</div>
+            <div className="mt-2 mb-2 w-full h-full flex justify-end bg-slate-300 items-center">{ukTotalProfitPerItem}</div>
           </div>
   
           <div className="mt-4 w-full bg-slate-300 flex flex-wrap items-center">
