@@ -3,18 +3,27 @@ import { useDispatch , useSelector } from "react-redux";
 import { priceFunc , costFunc , shippingChargeFunc , shippingFunc } from "./redux/priceSlice";
 import Options from "./components/options";
 import Consequences from "./components/consequences";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { getCurrency } from "./redux/currencyApiSlice";
-//import PieChart from "./components/pieChart";
+
 
 function App() {
 
   const dispatch = useDispatch()
-/*   const soldPRice = useSelector(state => state.price.soldPrice)
-  const itemCost = useSelector(state => state.price.cost)
-  const shippingCharge = useSelector(state => state.price.shippingCharge)
-  const shippingCost = useSelector(state => state.price.shipping)  */ 
-  
+
+  const itemPriceInputRef = useRef(null);
+  const itemCostInputRef = useRef(null);
+  const shippingChargeInputRef = useRef(null);
+  const shippingCostInputRef = useRef(null);
+
+
+    const handleTextClick = (inputRef) => {
+
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }      
+
+    };
 
 
   useEffect(()=> {
@@ -49,40 +58,76 @@ function App() {
   };
 
   return (
-    <div className="  h-full flex justify-center bg-[#282c34]">
-      <div className="w-full md:w-1/6 lg:w-2/6 xl:w-3/6 h-full flex flex-col items-center mr-2 ml-2">
+
+    <div className="bg-gray-800 w-full h-full flex justify-center items-center overflow-x-auto">
+      <div className="main-container flex flex-col w-full sm:max-w-[675px] mt-3">
   
-        <div className="price w-full mt-10 md:mt-36 flex flex-col md:flex-row justify-between">
-  
-          <div className="w-full md:w-4/5 flex flex-col items-center bg-slate-300 mb-4 md:mb-0">
-            <div className="flex justify-between mt-3 mb-3">
-              <span className="mr-2 md:mr-12 w-full md:w-auto">Item Sold Price</span>
-              <input type="text" className="w-16 md:w-auto mr-1 md:ml-12 p-1" onChange={(e) => handleInputChange(e, "soldPrice")}></input>
+      <div className="flex flex-col sm:flex-row justify-center">
+                <div className='flex flex-col w-full sm:w-[50%]'>
+    
+                  <div className="bg-gray-200 rounded-md m-2 p-2">
+                    <div className="flex justify-between m-2">
+                      <div 
+                        className="text-xs flex justify-center items-center cursor-pointer"
+                        onClick={() => handleTextClick(itemPriceInputRef)}
+                      >Item Sold Price</div>
+                      <div>
+                        <input
+                        ref={itemPriceInputRef}
+                        className="p-2 w-20 h-9 rounded-md text-xs font-semibold"
+                        onChange={(e) => handleInputChange(e , "soldPrice")}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex justify-between m-2">
+                    <div className="text-xs flex justify-center items-center cursor-pointer"
+                         onClick={() => handleTextClick(itemCostInputRef)}
+                    >Item Cost</div>
+                      <div>
+                        <input
+                        ref={itemCostInputRef}
+                        className="p-2 w-20 h-9 rounded-md text-xs font-semibold"
+                        onChange={(e) => handleInputChange(e , "itemCost")}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+    
+                <div className='flex flex-col w-full sm:w-[50%]'>
+                  <div className="bg-gray-200 rounded-md m-2 p-2">
+    
+                    <div className="flex justify-between m-2">
+                    <div className="text-xs flex justify-center items-center cursor-pointer"
+                         onClick={() => handleTextClick(shippingChargeInputRef)}>Shipping Charge</div>
+                      <div>
+                        <input 
+                          ref={shippingChargeInputRef}
+                          className="p-2 w-20 h-9 rounded-md text-xs font-semibold"
+                          onChange={(e) => handleInputChange(e , "shippingCharge")}
+                        />
+                      </div>
+                    </div>
+    
+                    <div className="flex justify-between m-2">
+                    <div className="text-xs flex justify-center items-center cursor-pointer"
+                         onClick={() => handleTextClick(shippingCostInputRef)}>Shipping Cost</div>
+                      <div>
+                        <input 
+                        ref={shippingCostInputRef}
+                        className="p-2 w-20 h-9 rounded-md text-xs font-semibold"
+                        onChange={(e) => handleInputChange(e , "shippingCost")}
+                        />
+                      </div>
+                    </div>
+    
+                  </div>
+                </div>
             </div>
-            <div className="flex justify-between mt-3 mb-3">
-              <span className="mr-2 md:mr-12">Item Cost</span>
-              <input type="text" className="w-16 md:w-auto mr-1 md:ml-12 p-1" onChange={(e) => handleInputChange(e, "itemCost")}></input>
-            </div>
-          </div>
-  
-          <div className="w-full md:w-4/5 flex flex-col items-center bg-slate-300 md:ml-2">
-            <div className="flex justify-between mt-3 mb-3">
-              <span className="mr-2 md:mr-12">Shipping Charge</span>
-              <input type="text" className="w-16 md:w-auto mr-1 md:ml-12 p-1" onChange={(e) => handleInputChange(e, "shippingCharge")}></input>
-            </div>
-            <div className="flex justify-between mt-3 mb-3">
-              <span className="mr-2 md:mr-12">Shipping Cost</span>
-              <input type="text" className="w-16 md:w-auto mr-1 md:ml-12 p-1" onChange={(e) => handleInputChange(e, "shippingCost")}></input>
-            </div>
-          </div>
-  
-        </div>
   
         <Options />
   
-        <div className="mt-4 flex justify-center bg-slate-300 font-bold w-full">
-          Estimated Results
-        </div>
+        <div className="flex justify-center items-center text-white m-2">Estimated Results</div>
   
         <Consequences />
   

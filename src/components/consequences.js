@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux" 
-
+import CountryFlag from 'react-country-flag';  
 /* 
 
       ukBreakEvenPrice = ((ukCostWithoutFees + ukEtsyListingFee + 0.20 + ((0.20*GBP*vatFeeRate)/(100)) +((0.2*vatFeeRate)/100))*10000) / (8925 - 100*currenyDifferenceRate - 100*offSiteAdsRate - ((100*100*ukVatRate)/(100 + ukVatRate)) - currenyDifferenceRate*vatFeeRate - offSiteAdsRate*vatFeeRate - 10.75*vatFeeRate) // vergi dahil breakeven
@@ -212,15 +212,20 @@ const Consequences = () => {
   if(usChartProfitSlice < 0){
     usChartProfitSlice = 0
   }
+
   const usData = {
-    labels : [`Fees & Costs => ${parseFloat((100-usChartProfitSlice).toFixed(2))}` , `Total Profit => ${parseFloat(usChartProfitSlice.toFixed(2))}`],
-    datasets : [{
-      label : '',
-      data : [ 100-usChartProfitSlice , usChartProfitSlice ],
-      backgroundColor : ['blue' , 'green'],
-      borderColor : ['blue' , 'green'],
-    }]
-  }
+    /*         labels: [`Fees & Costs = ${parseFloat((100-profitPercentage).toFixed(2))} %` , `Total Profit = ${parseFloat(profitPercentage.toFixed(2))} %`], */
+            datasets: [
+              {
+                data: [100-usChartProfitSlice , usChartProfitSlice],
+                backgroundColor: [
+                  "rgb(2, 132, 199)",
+                  "rgb(16, 185, 129)",
+                ],
+                hoverOffset: 4,
+              },
+            ],
+          }
 
   let ukChartProfitSlice = ukProfitMargin
   ukChartProfitSlice = parseFloat(ukChartProfitSlice.toFixed(2))
@@ -228,106 +233,149 @@ const Consequences = () => {
   if(ukChartProfitSlice < 0){
     ukChartProfitSlice = 0
   }
-  const ukData = {
-    labels : [`Fees & Costs => ${parseFloat((100-ukChartProfitSlice).toFixed(2))}` , `Total Profit => ${parseFloat(ukChartProfitSlice.toFixed(2))}`],
-    datasets : [{
-      label : '',
-      data : [ 100-ukChartProfitSlice , ukChartProfitSlice ],
-      backgroundColor : ['blue' , 'green'],
-      borderColor : ['blue' , 'green'],
-    }]
-  }
 
-  const options = {
+    const ukData = {
+/*         labels: [`Fees & Costs = ${parseFloat((100-profitPercentage).toFixed(2))} %` , `Total Profit = ${parseFloat(profitPercentage.toFixed(2))} %`], */
+        datasets: [
+          {
+            data: [100-ukChartProfitSlice , ukChartProfitSlice],
+            backgroundColor: [
+              "rgb(2, 132, 199)",
+              "rgb(16, 185, 129)",
+            ],
+            hoverOffset: 4,
+          },
+        ],
+      }
 
-  }
+      const options = {
+        cutout: 80,
+        radius: "60%",
+        borderWidth: 0,
+        rotation: -((100 - ukChartProfitSlice) / 100) * 360 / 2,
+      };
+
+      let textColor
+      if(parseFloat(usTotalProfitPerItem.toFixed(2)) > 0 || parseFloat(ukTotalProfitPerItem.toFixed(2)) > 0){
+
+        textColor = "text-green-600"
+
+      } else if(parseFloat(usTotalProfitPerItem.toFixed(2)) === 0 || parseFloat(ukTotalProfitPerItem.toFixed(2))){
+
+        textColor = "text-black"
+
+      } else if(parseFloat(usTotalProfitPerItem.toFixed(2)) < 0 || parseFloat(ukTotalProfitPerItem.toFixed(2)) < 0) {
+        textColor = "text-red-600"
+      }
 
   return (
-    <div className="flex flex-col items-center mb-12 w-full">
+    <div className="flex flex-col items-center mb-4 w-full p-2">
   
       {selectedCountry.value === "UK" && (
         <div className="w-full flex flex-col items-center">
-          <div className="mt-4 flex w-full justify-center">
-            <div className="mt-2 mb-2 w-full h-full bg-slate-300 flex items-center">Total Profit Per Item</div>
-            <div className="mt-2 mb-2 w-full h-full flex justify-end bg-slate-300 items-center">{ukTotalProfitPerItem}</div>
-          </div>
+            <div className="flex justify-between bg-gray-200 rounded-md mb-6 w-full">
+                <div className="flex justify-center items-center mt-2 mb-2 ml-4 font-bold text-md">Total Profit Per Item</div>
+                
+                <div className={`flex justify-center items-center mt-2 mb-2 mr-4 font-bold text-md ${textColor}`}>£{parseFloat(ukTotalProfitPerItem.toFixed(2))}</div>
+            </div>
   
-          <div className="mt-4 w-full bg-slate-300 flex flex-wrap items-center">
-            <div className="ml-4 flex flex-col justify-start w-full sm:w-1/2 md:w-1/3">
+            <div className='flex flex-col w-full bg-gray-200 rounded-md sm:flex-row p-4'>
+
+            <div className="w-full sm:w-7/12 flex flex-col">
+
               <div className="flex justify-between mt-2 mb-2">
-                <div>Profit Margin <p>Total Profit / Total Revenue</p></div>
-                <div className="flex items-center">% {isFinite(parseFloat(ukProfitMargin.toFixed(2))) === false ? 0 : parseFloat(ukProfitMargin.toFixed(2))}</div>
+              <div className="text-sm font-semibold">Profit Margin <p className="text-gray-600 text-xs">Total Profit / Total Revenue</p></div>
+                <div className="flex justify-center items-center mr-2 text-sm font-medium">{isFinite(parseFloat(ukProfitMargin.toFixed(2))) === false ? 0 : parseFloat(ukProfitMargin.toFixed(2))} %</div>
               </div>
+
               <div className=" flex justify-between mt-2 mb-2">
-                <div>Return on Cost <p>Total Profit / Item Cost</p></div>
-                <div className="flex items-center">{isFinite(parseFloat(ukReturnOnCost.toFixed(2))) === false ? 0 : parseFloat(ukReturnOnCost.toFixed(2))}</div>
+              <div className="text-sm font-semibold">Return on Cost <p className="text-gray-600 text-xs">Total Profit / Item Cost</p></div>
+                <div className="flex justify-center items-center mr-2 text-sm font-medium">{isFinite(parseFloat(ukReturnOnCost.toFixed(2))) === false ? 0 : parseFloat(ukReturnOnCost.toFixed(2))} %</div>
               </div>
+              
               <div className=" flex justify-between mt-2 mb-2">
-                <div className="font-bold">Breakeven Price</div>
-                <div className="flex items-center">{ukBreakEvenPrice}</div>
+                <div className="flex justify-center items-center font-bold">Breakeven Price</div>
+                <div className="flex justify-center items-center font-bold mr-2 text-sm">£ {ukBreakEvenPrice}</div>
               </div>
-              <div className="vertical-line w-full border-t border-black "></div>
+
+              <div className='border-gray-400 border mt-2 mb-2'></div>
+
               <div className=" flex justify-between mt-2 mb-2">
-                <div className="font-bold">Total Fees</div>
-                <div className="flex items-center">{parseFloat(ukTotalFees.toFixed(2))}</div>
+                <div className="flex justify-center items-center font-bold text-sm">Total Fees</div>
+                <div className="flex justify-center items-center font-bold mr-2 text-sm">£ {parseFloat(ukTotalFees.toFixed(2))}</div>
               </div>
+
               <div className=" flex justify-between mt-2 mb-2">
-                <div>Average Fee Rate<p>Total Fees / Total Revenue</p></div>
-                <div className="flex items-center">% {isFinite(parseFloat(ukAverageFeeRate.toFixed(2)))===false ? 100 : parseFloat(ukAverageFeeRate.toFixed(2))}</div>
+                <div className="font-semibold text-sm">Average Fee Rate<p className="text-gray-600 text-xs">Total Fees / Total Revenue</p></div>
+                <div className="flex justify-center items-center mr-2 text-sm font-medium">{isFinite(parseFloat(ukAverageFeeRate.toFixed(2)))===false ? 100 : parseFloat(ukAverageFeeRate.toFixed(2))} %</div>
               </div>
-              <div className=" flex justify-between mt-2 mb-2">
-                <div className="flex justify-center w-full bg-slate-200 rounded-xl">£ = Pound Sterling</div>
+
+              <div className="flex justify-center items-center w-full">
+                <div className='w-full bg-gray-100 flex justify-center items-center mt-2 mb-2 rounded-xl text-xs h-6'>£ = Pound Sterling</div>
               </div>
             </div>
-            <div className="flex w-full sm:w-1/2 md:w-2/3 lg:w-1/2 mt-10 ml-10 mr-10 sm:justify-center sm:mr-0 sm:ml-0  mb-5">
-              <div className='flex w-full h-full justify-center'>
+
+            <div className="w-full sm:w-5/12 flex justify-center items-center relative mb-5">
+
                 <Doughnut
                   data={ukData}
                   options={options}
                 ></Doughnut>
-              </div>
+              
+                <CountryFlag className='absolute bottom-0 right-0' countryCode="GB" svg style={{ width: '64px', height: '32px' }} />
+
             </div>
           </div>
   
-          <div className="mt-4 mb-4 w-full md:w-3/4 bg-slate-300 xl:w-full">
-            <div className=" flex justify-between mt-2 mb-2">
-              <div>Total Revenue</div>
-              <div className="flex items-center">{parseFloat(itemMarketSoldPrice.toFixed(2))} £</div>
+          <div className='text-white flex justify-center items-center mb-2 mt-2'>Detailed Breakdown</div>
+
+          <div className="flex flex-col w-full bg-gray-200 rounded-md p-4">
+
+            <div className=" flex justify-between">
+              <div className="text-xs flex justify-center items-center font-semibold">Total Revenue</div>
+              <div className="flex justify-center items-center text-xs font-semibold">£ {parseFloat(itemMarketSoldPrice.toFixed(2))}</div>
             </div>
-            <div className="vertical-line w-full border-t border-black "></div>
-            <div className=" flex justify-between mt-2 mb-2">
-              <div>Listing Fee</div>
-              <div className="flex items-center">{parseFloat(ukEtsyListingFee.toFixed(2))} £</div>
+
+            <div className='border-gray-400 border m-1'></div>
+
+            <div className=" flex justify-between">
+              <div className="text-xs flex justify-center items-center font-semibold">Listing Fee</div>
+              <div className="flex justify-center items-center text-xs font-semibold">£ {parseFloat(ukEtsyListingFee.toFixed(2))}</div>
             </div>
-            <div className=" flex justify-between mt-2 mb-2">
-              <div>Transaction Fee</div>
-              <div className="flex items-center">{parseFloat(transictionFee.toFixed(2))} £</div>
+
+            <div className="flex justify-between mt-1">
+              <div className="text-xs flex justify-center items-center font-semibold">Transaction Fee</div>
+              <div className="flex justify-center items-center text-xs font-semibold">£ {parseFloat(transictionFee.toFixed(2))}</div>
             </div>
-            <div className=" flex justify-between mt-2 mb-2">
-              <div>Etsy Payment Fee</div>
-              <div className="flex items-center">{parseFloat(ukEtsyPaymentFee.toFixed(2))} £</div>
+
+            <div className="flex justify-between mt-1">
+              <div className="text-xs flex justify-center items-center font-semibold">Etsy Payment Fee</div>
+              <div className="flex justify-center items-center text-xs font-semibold">£ {parseFloat(ukEtsyPaymentFee.toFixed(2))}</div>
             </div>
-            <div className=" flex justify-between mt-2 mb-2">
-              <div>Offsite Add Fee</div>
-              <div className="flex items-center">{parseFloat(ukOffSiteAds.toFixed(2))} £</div>
+
+            <div className="flex justify-between mt-1">
+              <div className="text-xs flex justify-center items-center font-semibold">Offsite Add Fee</div>
+              <div className="flex justify-center items-center text-xs font-semibold">£ {parseFloat(ukOffSiteAds.toFixed(2))}</div>
             </div>
-            <div className="vertical-line w-full border-t border-black "></div>
-            <div className=" flex justify-between mt-2 mb-2">
-              <div>Total Fees</div>
-              <div className="flex items-center">{parseFloat(ukTotalFees.toFixed(2))} £</div>
+
+            <div className='border-gray-400 border m-1'></div>
+            <div className="flex justify-between">
+              <div className="text-xs flex justify-center items-center font-semibold">Total Fees</div>
+              <div className="flex justify-center items-center text-xs font-semibold">£ {parseFloat(ukTotalFees.toFixed(2))}</div>
             </div>
-            <div className=" flex justify-between mt-2 mb-2">
-              <div>Total Cost</div>
-              <div className="flex items-center">{parseFloat(ukCostWithoutFees.toFixed(2))} £</div>
+            <div className="flex justify-between mt-1">
+              <div className="text-xs flex justify-center items-center font-semibold">Total Cost</div>
+              <div className="flex justify-center items-center text-xs font-semibold">£ {parseFloat(ukCostWithoutFees.toFixed(2))}</div>
             </div>
-            <div className=" flex justify-between mt-2 mb-2">
-              <div>Additional Vat</div>
-              <div className="flex items-center">{parseFloat(ukTotalVats.toFixed(2))} £</div>
+            <div className="flex justify-between mt-1">
+              <div className="text-xs flex justify-center items-center font-semibold">Additional Vat</div>
+              <div className="flex justify-center items-center text-xs font-semibold">£ {parseFloat(ukTotalVats.toFixed(2))}</div>
             </div>
-            <div className="vertical-line w-full border-t border-black "></div>
-            <div className=" flex justify-between mt-2 mb-2">
-              <div>Total Profit</div>
-              <div className="flex items-center">{parseFloat(ukTotalProfitPerItem.toFixed(2))} £</div>
+            <div className='border-gray-400 border m-1'></div>
+
+            <div className="flex justify-between">
+              <div className="text-xs flex justify-center items-center font-semibold">Total Profit</div>
+              <div className="flex justify-center items-center text-xs font-semibold">£ {parseFloat(ukTotalProfitPerItem.toFixed(2))}</div>
             </div>
           </div>
         </div>
@@ -335,83 +383,107 @@ const Consequences = () => {
   
       {selectedCountry.value === "US" && (
         <div className="w-full flex flex-col items-center">
-          <div className="mt-4 flex w-full justify-center">
-            <div className="mt-2 mb-2 w-full h-full bg-slate-300 flex items-center">Total Profit Per Item</div>
-            <div className="mt-2 mb-2 w-full h-full flex justify-end bg-slate-300 items-center">{usTotalProfitPerItem}</div>
-          </div>
-  
-          <div className="mt-4 w-full bg-slate-300 flex flex-wrap justify-between">
-            <div className="flex flex-col justify-start w-full sm:w-1/2 md:w-1/3">
-              <div className="flex justify-between mt-2 mb-2">
-                <div>Profit Margin <p>Total Profit / Total Revenue</p></div>
-                <div className="flex items-center">{isFinite(parseFloat(usProfitMargin.toFixed(2))) === false ? 0 : parseFloat(usProfitMargin.toFixed(2))} %</div>
-              </div>
-              <div className=" flex justify-between mt-2 mb-2">
-                <div>Return on Cost <p>Total Profit / Item Cost</p></div>
-                <div className="flex items-center">{isFinite(parseFloat(usReturnOnCost.toFixed(2))) === false ? 0 : parseFloat(usReturnOnCost.toFixed(2))} %</div>
-              </div>
-              <div className=" flex justify-between mt-2 mb-2">
-                <div className="font-bold">Breakeven Price</div>
-                <div className="flex items-center">{usBreakEvenPrice}</div>
-              </div>
-              <div className="vertical-line w-full border-t border-black "></div>
-              <div className=" flex justify-between mt-2 mb-2">
-                <div className="font-bold">Total Fees</div>
-                <div className="flex items-center">{parseFloat(usTotalFees.toFixed(2))}</div>
-              </div>
-              <div className=" flex justify-between mt-2 mb-2">
-                <div>Average Fee Rate<p>Total Fees / Total Revenue</p></div>
-                <div className="flex items-center">% {isFinite(parseFloat(usAverageFeeRate.toFixed(2)))===false ? 100 : parseFloat(usAverageFeeRate.toFixed(2))}</div>
-              </div>
-              <div className=" flex justify-between mt-2 mb-2">
-                <div className="flex justify-center w-full bg-slate-200 rounded-xl">$ = US Dollar</div>
-              </div>
+            <div className="flex justify-between bg-gray-200 rounded-md mb-6 w-full">
+                <div className="flex justify-center items-center mt-2 mb-2 ml-4 font-bold text-md">Total Profit Per Item</div>
+                
+                <div className={`flex justify-center items-center mt-2 mb-2 mr-4 font-bold text-md ${textColor}`}>${parseFloat(usTotalProfitPerItem.toFixed(2))}</div>
             </div>
-            <div className="flex w-full sm:w-1/2 md:w-2/3 lg:w-1/2 mt-10 ml-10 mr-10 sm:justify-center sm:mr-0 sm:ml-0  mb-5">
-              <div className='flex w-full h-full justify-center'>
+  
+            <div className='flex flex-col w-full bg-gray-200 rounded-md sm:flex-row p-4'>
+            <div className="w-full sm:w-7/12 flex flex-col">
+
+            <div className="flex justify-between mt-2 mb-2">
+              <div className="text-sm font-semibold">Profit Margin <p className="text-gray-600 text-xs">Total Profit / Total Revenue</p></div>
+                <div className="flex justify-center items-center mr-2 text-sm font-medium">{isFinite(parseFloat(usProfitMargin.toFixed(2))) === false ? 0 : parseFloat(usProfitMargin.toFixed(2))} %</div>
+              </div>
+
+              <div className=" flex justify-between mt-2 mb-2">
+              <div className="text-sm font-semibold">Return on Cost <p className="text-gray-600 text-xs">Total Profit / Item Cost</p></div>
+                <div className="flex justify-center items-center mr-2 text-sm font-medium">{isFinite(parseFloat(usReturnOnCost.toFixed(2))) === false ? 0 : parseFloat(usReturnOnCost.toFixed(2))} %</div>
+              </div>
+
+              <div className=" flex justify-between mt-2 mb-2">
+                <div className="flex justify-center items-center font-bold">Breakeven Price</div>
+                <div className="flex justify-center items-center font-bold mr-2 text-sm">$ {usBreakEvenPrice}</div>
+              </div>
+              <div className='border-gray-400 border mt-2 mb-2'></div>
+
+              <div className=" flex justify-between mt-2 mb-2">
+                <div className="flex justify-center items-center font-bold text-sm">Total Fees</div>
+                <div className="flex justify-center items-center font-bold mr-2 text-sm">$ {parseFloat(usTotalFees.toFixed(2))}</div>
+              </div>
+
+              <div className=" flex justify-between mt-2 mb-2">
+                <div className="font-semibold text-sm">Average Fee Rate<p className="text-gray-600 text-xs">Total Fees / Total Revenue</p></div>
+                <div className="flex justify-center items-center mr-2 text-sm font-medium">{isFinite(parseFloat(usAverageFeeRate.toFixed(2)))===false ? 100 : parseFloat(usAverageFeeRate.toFixed(2))} %</div>
+              </div>
+
+              <div className="flex justify-center items-center w-full">
+                <div className='w-full bg-gray-100 flex justify-center items-center mt-2 mb-2 rounded-xl text-xs h-6'>$ = US Dollar</div>
+              </div>
+
+            </div>
+
+            <div className="w-full sm:w-5/12 flex justify-center items-center relative mb-5">
+
                 <Doughnut
                   data={usData  }
                   options={options}
                 ></Doughnut>
-              </div>
+              
+              <CountryFlag className='absolute bottom-0 right-0' countryCode="US" svg style={{ width: '64px', height: '32px' }} />
+
             </div>
           </div>
   
-          <div className="mt-4 mb-4 w-full md:w-3/4 bg-slate-300 xl:w-full">
-            <div className=" flex justify-between mt-2 mb-2">
-              <div>Total Revenue</div>
-              <div className="flex items-center">$ {itemMarketSoldPrice}</div>
+          <div className='text-white flex justify-center items-center mb-2 mt-2'>Detailed Breakdown</div>
+
+          <div className="flex flex-col w-full bg-gray-200 rounded-md p-4">
+            
+          <div className=" flex justify-between">
+              <div className="text-xs flex justify-center items-center font-semibold">Total Revenue</div>
+              <div className="flex justify-center items-center text-xs font-semibold">$ {parseFloat(itemMarketSoldPrice.toFixed(2))}</div>
             </div>
-            <div className="vertical-line w-full border-t border-black "></div>
-            <div className=" flex justify-between mt-2 mb-2">
-              <div>Listing Fee</div>
-              <div className="flex items-center">$ {etsyListingFee}</div>
+            
+            <div className='border-gray-400 border m-1'></div>
+
+            <div className=" flex justify-between">
+              <div className="text-xs flex justify-center items-center font-semibold">Listing Fee</div>
+              <div className="flex justify-center items-center text-xs font-semibold">$ {parseFloat(etsyListingFee.toFixed(2))}</div>
             </div>
-            <div className=" flex justify-between mt-2 mb-2">
-              <div>Transaction Fee</div>
-              <div className="flex items-center">$ {transictionFee}</div>
+
+            <div className="flex justify-between mt-1">
+              <div className="text-xs flex justify-center items-center font-semibold">Transaction Fee</div>
+              <div className="flex justify-center items-center text-xs font-semibold">$ {parseFloat(transictionFee.toFixed(2))}</div>
             </div>
-            <div className=" flex justify-between mt-2 mb-2">
-              <div>Etsy Payment Fee</div>
-              <div className="flex items-center">$ {parseFloat(usEtsyPaymentFee.toFixed(2))}</div>
+
+            <div className="flex justify-between mt-1">
+              <div className="text-xs flex justify-center items-center font-semibold">Etsy Payment Fee</div>
+              <div className="flex justify-center items-center text-xs font-semibold">$ {parseFloat(usEtsyPaymentFee.toFixed(2))}</div>
             </div>
-            <div className=" flex justify-between mt-2 mb-2">
-              <div>Offsite Add Fee</div>
-              <div className="flex items-center">$ {offSiteAdds}</div>
+
+            <div className="flex justify-between mt-1">
+              <div className="text-xs flex justify-center items-center font-semibold">Offsite Add Fee</div>
+              <div className="flex justify-center items-center text-xs font-semibold">$ {parseFloat(offSiteAdds.toFixed(2))}</div>
             </div>
-            <div className="vertical-line w-full border-t border-black "></div>
-            <div className=" flex justify-between mt-2 mb-2">
-              <div>Total Fees</div>
-              <div className="flex items-center">$ {usTotalFees}</div>
+
+            <div className='border-gray-400 border m-1'></div>
+
+            <div className="flex justify-between">
+              <div className="text-xs flex justify-center items-center font-semibold">Total Fees</div>
+              <div className="flex justify-center items-center text-xs font-semibold">$ {usTotalFees}</div>
             </div>
-            <div className=" flex justify-between mt-2 mb-2">
-              <div>Total Cost</div>
-              <div className="flex items-center">$ {usCostsWithoutFees}</div>
+
+            <div className="flex justify-between mt-1">
+              <div className="text-xs flex justify-center items-center font-semibold">Total Cost</div>
+              <div className="flex justify-center items-center text-xs font-semibold">$ {usCostsWithoutFees}</div>
             </div>
-            <div className="vertical-line w-full border-t border-black "></div>
-            <div className=" flex justify-between mt-2 mb-2">
-              <div>Total Profit</div>
-              <div className="flex items-center">$ {parseFloat(usTotalProfitPerItem.toFixed(2))}</div>
+
+            <div className='border-gray-400 border m-1'></div>
+
+            <div className=" flex justify-between">
+              <div className="text-xs flex justify-center items-center font-semibold">Total Profit</div>
+              <div className="flex justify-center items-center text-xs font-semibold">$ {parseFloat(usTotalProfitPerItem.toFixed(2))}</div>
             </div>
           </div>
         </div>
