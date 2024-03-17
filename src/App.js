@@ -5,9 +5,12 @@ import Options from "./components/options";
 import Consequences from "./components/consequences";
 import { useEffect, useRef } from "react";
 import { getCurrency } from "./redux/currencyApiSlice";
+import UKconsequences from "./components/ukConsequences";
 
 
 function App() {
+
+  const selectedCountry = useSelector(state => state.country.country);
 
   const dispatch = useDispatch()
 
@@ -128,8 +131,8 @@ function App() {
         <Options />
   
         <div className="flex justify-center items-center text-white m-2">Estimated Results</div>
-  
-        <Consequences />
+          {selectedCountry.value === "US" && (<Consequences />)}
+          {selectedCountry.value === "UK" && (<UKconsequences />)}
   
 
       </div>
