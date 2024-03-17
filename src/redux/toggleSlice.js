@@ -119,11 +119,12 @@ export const toggleSlice = createSlice({
       }else {
         state.ukCosts = action.payload
       }
-    }
+    },
+    togglesReset: (state) => initialState,
   },
 })
 
 
-export const { boolToggleFunc , underOrOver10kUsdFunc , salesTaxFunc , otherCostFunc , UkVatRateFunc , FeeVatRateFunc , ukCostsFunc} = toggleSlice.actions
+export const { boolToggleFunc , underOrOver10kUsdFunc , salesTaxFunc , otherCostFunc , UkVatRateFunc , FeeVatRateFunc , ukCostsFunc , togglesReset} = toggleSlice.actions
 
 export default toggleSlice.reducer

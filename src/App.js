@@ -31,31 +31,27 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
-
-  const selectedCountry = useSelector(state => state.country.country)
-  console.log("selectedCountry : " , selectedCountry)
   const handleInputChange = (event, field) => {
-    const filteredValue = event.target.value.replace(/[^0-9,.]/g, "");
-    let parsedValue = parseFloat(filteredValue.replace(",", "."));
-    if(isNaN(parsedValue)){
-      parsedValue = 0
-    }
-    
+    const inputValue = event.target.value.replace(/[^0-9,.]/g, "");
+    let dotValue = inputValue.replace(",", ".");
 
     if(field === "soldPrice"){
-      dispatch(priceFunc(parsedValue))
+      dispatch(priceFunc(dotValue))
     }
     if(field === "itemCost"){
-      dispatch(costFunc(parsedValue))
+      dispatch(costFunc(dotValue))
     }
     if(field === "shippingCharge"){
-      dispatch(shippingChargeFunc(parsedValue))
+      dispatch(shippingChargeFunc(dotValue))
     }
     if(field === "shippingCost"){
-      dispatch(shippingFunc(parsedValue))
+      dispatch(shippingFunc(dotValue))
     }
     
   };
+
+  const prices = useSelector(state => state.price)
+
 
   return (
 
@@ -74,6 +70,7 @@ function App() {
                       <div>
                         <input
                         ref={itemPriceInputRef}
+                        value={prices.soldPrice}
                         className="p-2 w-20 h-9 rounded-md text-xs font-semibold"
                         onChange={(e) => handleInputChange(e , "soldPrice")}
                         />
@@ -86,6 +83,7 @@ function App() {
                       <div>
                         <input
                         ref={itemCostInputRef}
+                        value={prices.cost}
                         className="p-2 w-20 h-9 rounded-md text-xs font-semibold"
                         onChange={(e) => handleInputChange(e , "itemCost")}
                         />
@@ -103,6 +101,7 @@ function App() {
                       <div>
                         <input 
                           ref={shippingChargeInputRef}
+                          value={prices.shippingCharge}
                           className="p-2 w-20 h-9 rounded-md text-xs font-semibold"
                           onChange={(e) => handleInputChange(e , "shippingCharge")}
                         />
@@ -115,6 +114,7 @@ function App() {
                       <div>
                         <input 
                         ref={shippingCostInputRef}
+                        value={prices.shipping}
                         className="p-2 w-20 h-9 rounded-md text-xs font-semibold"
                         onChange={(e) => handleInputChange(e , "shippingCost")}
                         />

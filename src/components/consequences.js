@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux" 
+import { useDispatch, useSelector } from "react-redux" 
 import CountryFlag from 'react-country-flag';  
 /* 
 
@@ -20,6 +20,10 @@ import {
 } from 'chart.js';
 
 import { Doughnut } from 'react-chartjs-2';
+import { priceReset } from "../redux/priceSlice";
+import { CountryReset } from "../redux/countrySlice";
+import { togglesReset } from "../redux/toggleSlice";
+import { useEffect, useState } from "react";
 
 ChartJS.register(
   ArcElement,
@@ -37,10 +41,30 @@ const Consequences = () => {
   let GBP = currencies.data?.GBP
   GBP = parseFloat(GBP?.toFixed(1))
 
-  const itemSoldPRice = useSelector(state => state.price.soldPrice);
-  const itemCost = useSelector(state => state.price.cost);
-  const shippingCharge = useSelector(state => state.price.shippingCharge);
-  const shippingCost = useSelector(state => state.price.shipping);
+  let itemSoldPRice = useSelector(state => state.price.soldPrice);
+  itemSoldPRice = parseFloat(itemSoldPRice)
+  if(isNaN(itemSoldPRice)){
+    itemSoldPRice = 0
+  }
+
+  let itemCost = useSelector(state => state.price.cost);
+  itemCost = parseFloat(itemCost)
+  if(isNaN(itemCost)){
+    itemCost = 0
+  }
+
+  let shippingCharge = useSelector(state => state.price.shippingCharge);
+  shippingCharge = parseFloat(shippingCharge)
+  if(isNaN(shippingCharge)){
+    shippingCharge = 0
+  }
+
+  let shippingCost = useSelector(state => state.price.shipping);
+  shippingCost = parseFloat(shippingCost)
+  if(isNaN(shippingCost)){
+    shippingCost = 0
+  }
+
   const currenyDifferenceRate = useSelector(state => state.toggle.currencyDifferenceRate);
   const offSiteAdsRate = useSelector(state => state.toggle.underOrOver10kUsd);
 
@@ -62,7 +86,6 @@ const Consequences = () => {
     ukOffSiteAds = 100*GBP
   }
 
-  console.log("ukOffSiteAds : " , ukOffSiteAds)
 
   let transictionFee = ((itemMarketSoldPrice * 65) / 1000)
   //transictionFee = parseFloat(transictionFee.toFixed(2))
@@ -87,7 +110,6 @@ const Consequences = () => {
 
   let usCostsWithoutFees = itemCost + shippingCost + usOtherCosts
   //usCostsWithoutFees = parseFloat(usCostsWithoutFees.toFixed(2))
-  console.log("us shipping cost : " ,shippingCost , "us item cost : " , itemCost , "us other costs : " , usOtherCosts , "us total costs : " , usCostsWithoutFees)
 
   let usTotalProfitPerItem = itemMarketSoldPrice - (usCostsWithoutFees + usTotalFees)
   usTotalProfitPerItem = parseFloat(usTotalProfitPerItem.toFixed(2))
@@ -115,7 +137,9 @@ const Consequences = () => {
 
   usBreakEvenPrice = usBreakEvenPrice - shippingCharge
   usBreakEvenPrice = parseFloat(usBreakEvenPrice.toFixed(2))
-  
+  if(usBreakEvenPrice < 0) {
+    usBreakEvenPrice = 0
+  }
 
   // for United Kingdom
 
@@ -209,6 +233,10 @@ const Consequences = () => {
   ukBreakEvenPrice = ukBreakEvenPrice - shippingCharge
   ukBreakEvenPrice = parseFloat(ukBreakEvenPrice.toFixed(2))
 
+  if(ukBreakEvenPrice < 0) {
+    ukBreakEvenPrice = 0
+  }
+
   if(usChartProfitSlice < 0){
     usChartProfitSlice = 0
   }
@@ -268,6 +296,71 @@ const Consequences = () => {
         textColor = "text-red-600"
       }
 
+      const [USbreakEvenPriceState , USsetBreakEvenPriceState] = useState(0)
+      const [USProfit , USsetProfit] = useState(0)
+      const [USfee , USsetfee] = useState(0)
+      const [USListingFee , SETusListingFee] = useState(0)
+      const [USPaymentfee , SETPaymentfee] = useState(0)
+
+      useEffect(()=> {
+        USsetBreakEvenPriceState(usBreakEvenPrice)
+        USsetProfit(usTotalProfitPerItem)
+        USsetfee(usTotalFees)
+        SETusListingFee(etsyListingFee)
+        SETPaymentfee(usEtsyPaymentFee)
+       },[usBreakEvenPrice , usTotalProfitPerItem , usTotalFees , etsyListingFee , usEtsyPaymentFee])
+
+
+      const [UKbreakEvenPriceState , UKsetBreakEvenPriceState] = useState(0)
+      const [UKProfit , UKsetProfit] = useState(0)
+      const [UKfee , UKsetfee] = useState(0)
+      const [UKListingFee , setUKListingFee] = useState(0)
+      const [UKPaymentfee , setUKPaymentfee] = useState(0)
+
+      useEffect(()=> {
+        UKsetBreakEvenPriceState(ukBreakEvenPrice)
+        UKsetProfit(ukTotalProfitPerItem)
+        UKsetfee(ukTotalFees)
+        setUKListingFee(ukEtsyListingFee)
+        setUKPaymentfee(ukEtsyPaymentFee)
+       },[ukBreakEvenPrice , ukTotalProfitPerItem , ukTotalFees , ukEtsyListingFee , ukEtsyPaymentFee])
+
+
+
+       useEffect (()=> {
+        USsetBreakEvenPriceState(0)
+        USsetProfit(0)
+        USsetfee(0)
+        SETusListingFee(0)
+        SETPaymentfee(0)
+        UKsetBreakEvenPriceState(0)
+        UKsetProfit(0)
+        UKsetfee(0)
+        setUKListingFee(0)
+        setUKPaymentfee(0)
+       },[])
+
+      const dispatch = useDispatch()
+
+      const ResetCalculator = () => {
+        dispatch(priceReset());
+        dispatch(CountryReset());
+        dispatch(togglesReset());
+        setTimeout(() => {
+          USsetBreakEvenPriceState(0)
+          USsetProfit(0)
+          USsetfee(0)
+          SETusListingFee(0)
+          SETPaymentfee(0)
+          UKsetBreakEvenPriceState(0)
+          UKsetProfit(0)
+          UKsetfee(0)
+          setUKListingFee(0)
+          setUKPaymentfee(0)
+        }, 0);
+
+      }
+
   return (
     <div className="flex flex-col items-center mb-4 w-full p-2">
   
@@ -276,7 +369,7 @@ const Consequences = () => {
             <div className="flex justify-between bg-gray-200 rounded-md mb-6 w-full">
                 <div className="flex justify-center items-center mt-2 mb-2 ml-4 font-bold text-md">Total Profit Per Item</div>
                 
-                <div className={`flex justify-center items-center mt-2 mb-2 mr-4 font-bold text-md ${textColor}`}>£{parseFloat(ukTotalProfitPerItem.toFixed(2))}</div>
+                <div className={`flex justify-center items-center mt-2 mb-2 mr-4 font-bold text-md ${textColor}`}>£{parseFloat(UKProfit.toFixed(2))}</div>
             </div>
   
             <div className='flex flex-col w-full bg-gray-200 rounded-md sm:flex-row p-4'>
@@ -295,14 +388,14 @@ const Consequences = () => {
               
               <div className=" flex justify-between mt-2 mb-2">
                 <div className="flex justify-center items-center font-bold">Breakeven Price</div>
-                <div className="flex justify-center items-center font-bold mr-2 text-sm">£ {ukBreakEvenPrice}</div>
+                <div className="flex justify-center items-center font-bold mr-2 text-sm">£ {UKbreakEvenPriceState}</div>
               </div>
 
               <div className='border-gray-400 border mt-2 mb-2'></div>
 
               <div className=" flex justify-between mt-2 mb-2">
                 <div className="flex justify-center items-center font-bold text-sm">Total Fees</div>
-                <div className="flex justify-center items-center font-bold mr-2 text-sm">£ {parseFloat(ukTotalFees.toFixed(2))}</div>
+                <div className="flex justify-center items-center font-bold mr-2 text-sm">£ {parseFloat(UKfee.toFixed(2))}</div>
               </div>
 
               <div className=" flex justify-between mt-2 mb-2">
@@ -340,7 +433,7 @@ const Consequences = () => {
 
             <div className=" flex justify-between">
               <div className="text-xs flex justify-center items-center font-semibold">Listing Fee</div>
-              <div className="flex justify-center items-center text-xs font-semibold">£ {parseFloat(ukEtsyListingFee.toFixed(2))}</div>
+              <div className="flex justify-center items-center text-xs font-semibold">£ {parseFloat(UKListingFee.toFixed(2))}</div>
             </div>
 
             <div className="flex justify-between mt-1">
@@ -350,7 +443,7 @@ const Consequences = () => {
 
             <div className="flex justify-between mt-1">
               <div className="text-xs flex justify-center items-center font-semibold">Etsy Payment Fee</div>
-              <div className="flex justify-center items-center text-xs font-semibold">£ {parseFloat(ukEtsyPaymentFee.toFixed(2))}</div>
+              <div className="flex justify-center items-center text-xs font-semibold">£ {parseFloat(UKPaymentfee.toFixed(2))}</div>
             </div>
 
             <div className="flex justify-between mt-1">
@@ -375,7 +468,7 @@ const Consequences = () => {
 
             <div className="flex justify-between">
               <div className="text-xs flex justify-center items-center font-semibold">Total Profit</div>
-              <div className="flex justify-center items-center text-xs font-semibold">£ {parseFloat(ukTotalProfitPerItem.toFixed(2))}</div>
+              <div className="flex justify-center items-center text-xs font-semibold">£ {parseFloat(UKProfit.toFixed(2))}</div>
             </div>
           </div>
         </div>
@@ -386,7 +479,7 @@ const Consequences = () => {
             <div className="flex justify-between bg-gray-200 rounded-md mb-6 w-full">
                 <div className="flex justify-center items-center mt-2 mb-2 ml-4 font-bold text-md">Total Profit Per Item</div>
                 
-                <div className={`flex justify-center items-center mt-2 mb-2 mr-4 font-bold text-md ${textColor}`}>${parseFloat(usTotalProfitPerItem.toFixed(2))}</div>
+                <div className={`flex justify-center items-center mt-2 mb-2 mr-4 font-bold text-md ${textColor}`}>${parseFloat(USProfit.toFixed(2))}</div>
             </div>
   
             <div className='flex flex-col w-full bg-gray-200 rounded-md sm:flex-row p-4'>
@@ -404,13 +497,13 @@ const Consequences = () => {
 
               <div className=" flex justify-between mt-2 mb-2">
                 <div className="flex justify-center items-center font-bold">Breakeven Price</div>
-                <div className="flex justify-center items-center font-bold mr-2 text-sm">$ {usBreakEvenPrice}</div>
+                <div className="flex justify-center items-center font-bold mr-2 text-sm">$ {USbreakEvenPriceState}</div>
               </div>
               <div className='border-gray-400 border mt-2 mb-2'></div>
 
               <div className=" flex justify-between mt-2 mb-2">
                 <div className="flex justify-center items-center font-bold text-sm">Total Fees</div>
-                <div className="flex justify-center items-center font-bold mr-2 text-sm">$ {parseFloat(usTotalFees.toFixed(2))}</div>
+                <div className="flex justify-center items-center font-bold mr-2 text-sm">$ {parseFloat(USfee.toFixed(2))}</div>
               </div>
 
               <div className=" flex justify-between mt-2 mb-2">
@@ -449,7 +542,7 @@ const Consequences = () => {
 
             <div className=" flex justify-between">
               <div className="text-xs flex justify-center items-center font-semibold">Listing Fee</div>
-              <div className="flex justify-center items-center text-xs font-semibold">$ {parseFloat(etsyListingFee.toFixed(2))}</div>
+              <div className="flex justify-center items-center text-xs font-semibold">$ {parseFloat(USListingFee.toFixed(2))}</div>
             </div>
 
             <div className="flex justify-between mt-1">
@@ -459,7 +552,7 @@ const Consequences = () => {
 
             <div className="flex justify-between mt-1">
               <div className="text-xs flex justify-center items-center font-semibold">Etsy Payment Fee</div>
-              <div className="flex justify-center items-center text-xs font-semibold">$ {parseFloat(usEtsyPaymentFee.toFixed(2))}</div>
+              <div className="flex justify-center items-center text-xs font-semibold">$ {parseFloat(USPaymentfee.toFixed(2))}</div>
             </div>
 
             <div className="flex justify-between mt-1">
@@ -471,7 +564,7 @@ const Consequences = () => {
 
             <div className="flex justify-between">
               <div className="text-xs flex justify-center items-center font-semibold">Total Fees</div>
-              <div className="flex justify-center items-center text-xs font-semibold">$ {usTotalFees}</div>
+              <div className="flex justify-center items-center text-xs font-semibold">$ {USfee}</div>
             </div>
 
             <div className="flex justify-between mt-1">
@@ -483,12 +576,18 @@ const Consequences = () => {
 
             <div className=" flex justify-between">
               <div className="text-xs flex justify-center items-center font-semibold">Total Profit</div>
-              <div className="flex justify-center items-center text-xs font-semibold">$ {parseFloat(usTotalProfitPerItem.toFixed(2))}</div>
+              <div className="flex justify-center items-center text-xs font-semibold">$ {parseFloat(USProfit.toFixed(2))}</div>
             </div>
           </div>
         </div>
       )}
-  
+      
+      <div className='flex justify-center items-center mt-2 '>
+              <span 
+              className='w-42 bg-sky-600 p-4 text-sm font-bold text-white rounded-md cursor-pointer hover:bg-sky-800 transition-all duration-200 ease-in-out flex justify-center items-center'
+              onClick={() => ResetCalculator()}
+              >Reset Calculator</span></div>
+
     </div>
   );
   

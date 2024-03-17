@@ -11,11 +11,11 @@ export const countrySlice = createSlice({
     countryFunc: (state, action) => {
       state.country = action.payload
     },
-
+    CountryReset: (state) => initialState,
   },
 })
 
 
-export const { countryFunc } = countrySlice.actions
+export const { countryFunc , CountryReset} = countrySlice.actions
 
 export default countrySlice.reducer

@@ -23,10 +23,11 @@ export const priceSlice = createSlice({
     shippingFunc: (state, action) => {
       state.shipping = action.payload
     },
+    priceReset: (state) => initialState,
   },
 })
 
 
-export const { priceFunc , costFunc , shippingChargeFunc , shippingFunc } = priceSlice.actions
+export const { priceFunc , costFunc , shippingChargeFunc , shippingFunc , priceReset} = priceSlice.actions
 
 export default priceSlice.reducer
