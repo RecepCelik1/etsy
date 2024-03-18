@@ -169,19 +169,6 @@ const Consequences = () => {
         rotation: -((100 - usChartProfitSlice) / 100) * 360 / 2,
       };
 
-      let textColor
-      if(parseFloat(usTotalProfitPerItem.toFixed(2)) > 0){
-
-        textColor = "text-green-600"
-
-      } else if(parseFloat(usTotalProfitPerItem.toFixed(2)) === 0){
-
-        textColor = "text-black"
-
-      } else if(parseFloat(usTotalProfitPerItem.toFixed(2)) < 0) {
-        textColor = "text-red-600"
-      }
-
       const [USbreakEvenPriceState , USsetBreakEvenPriceState] = useState(0)
       const [USProfit , USsetProfit] = useState(0)
       const [USfee , USsetfee] = useState(0)
@@ -224,6 +211,19 @@ const Consequences = () => {
           SETAvgFeeRate(0)
         }, 0);
 
+      }
+
+      let textColor
+      if(parseFloat(USProfit.toFixed(2)) > 0){
+
+        textColor = "text-green-600"
+
+      } else if(parseFloat(USProfit.toFixed(2)) === 0){
+
+        textColor = "text-black"
+
+      } else if(parseFloat(USProfit.toFixed(2)) < 0) {
+        textColor = "text-red-600"
       }
 
   return (

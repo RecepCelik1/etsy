@@ -190,19 +190,6 @@ const UKconsequences = () => {
           rotation: -((100 - ukChartProfitSlice) / 100) * 360 / 2,
         };
 
-        let textColor
-        if(parseFloat(ukTotalProfitPerItem.toFixed(2)) > 0){
-  
-          textColor = "text-green-600"
-  
-        } else if(parseFloat(ukTotalProfitPerItem.toFixed(2))){
-  
-          textColor = "text-black"
-  
-        } else if(parseFloat(ukTotalProfitPerItem.toFixed(2)) < 0) {
-          textColor = "text-red-600"
-        }
-
         const [UKbreakEvenPriceState , UKsetBreakEvenPriceState] = useState(0)
         const [UKProfit , UKsetProfit] = useState(0)
         const [UKfee , UKsetfee] = useState(0)
@@ -245,6 +232,19 @@ const UKconsequences = () => {
              setUKFeeRate(0)
            }, 0);
    
+         }
+
+         let textColor
+         if(parseFloat(UKProfit.toFixed(2)) > 0){
+   
+           textColor = "text-green-600"
+   
+         } else if(parseFloat(UKProfit.toFixed(2)) === 0){
+   
+           textColor = "text-black"
+   
+         } else if(parseFloat(UKProfit.toFixed(2)) < 0) {
+           textColor = "text-red-600"
          }
 
          return (
